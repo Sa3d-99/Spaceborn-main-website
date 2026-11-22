@@ -10,12 +10,15 @@ background runs through the homepage and its footer. The hero film fades
 into it. Trial 1 covers the homepage.
 
 - **Hero:** the checked-in ELARA board footage, with a poster, reduced-motion
-  behavior, and one main action centered on the full-screen film.
+  behavior, and one main action slightly above center on the full-screen film.
+  The decorative intro plays once for about 4.5 seconds and holds on a frame.
 - **Why Spaceborn:** an asymmetric grid with larger simulation and Ground
   Control panels. Four smaller panels explain the other benefits. The grid
   spans the page gutters and the introduction is centered above it.
 - **Platform and simulation:** the existing product links and media, followed by
-  keyboard-selectable demonstrations with playback controls.
+  centered daisyUI scenario tabs with keyboard selection and video playback
+  controls. Sections use compact spacing and larger supporting copy. The
+  homepage self-hosts the Geist Google Font through `next/font/google`.
 - **Hardware:** product images retain their proportions alongside their existing
   board descriptions and specifications. Responsive tabs select the hardware.
 - **How it works:** explain documented AI, software, simulation, and hardware

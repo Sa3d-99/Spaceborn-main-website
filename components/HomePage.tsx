@@ -285,20 +285,24 @@ function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const inView = useInView(sectionRef, 0.05);
   const reduceMotion = useReducedMotion();
-  const [preference, setPreference] = useState<boolean | null>(null);
-  const [playing, setPlaying] = useState(false);
-  usePlayWhen(videoRef, inView && (preference ?? !reduceMotion));
+  const [introFinished, setIntroFinished] = useState(false);
+  usePlayWhen(videoRef, inView && !reduceMotion && !introFinished);
 
   return (
     <section ref={sectionRef} className={styles.hero} id="releases" aria-labelledby="home-title">
       <video
         ref={videoRef}
         className={styles.heroVideo}
-        muted loop playsInline preload="metadata"
+        muted playsInline preload="metadata"
         poster="/media/home/hero-sb1.webp"
         aria-hidden="true"
-        onPlaying={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
+        onTimeUpdate={(event) => {
+          const video = event.currentTarget;
+          if (video.currentTime >= 4.5) {
+            video.pause();
+            setIntroFinished(true);
+          }
+        }}
       >
         <source src="/media/home/hero-sb1-720.mp4" type="video/mp4" media="(max-width: 768px)" />
         <source src="/media/home/hero-sb1.mp4" type="video/mp4" />
@@ -311,10 +315,6 @@ function Hero() {
           Explore the stack <Icon name="arrow-down" />
         </a>
       </div>
-      <button type="button" className={`du-btn du-btn-outline ${styles.heroPlayback}`}
-        onClick={() => setPreference(!playing)} aria-label={playing ? 'Pause hero video' : 'Play hero video'}>
-        <Icon name={playing ? 'pause' : 'play'} />
-      </button>
     </section>
   );
 }
@@ -550,14 +550,14 @@ function RealityEngine() {
             </button>
           ))}
         </div>
-        <div className={styles.engine} role="tabpanel" id="sim-panel" aria-labelledby={`sim-tab-${scenario.id}`}>
+        <div className={`du-card du-card-border ${styles.engine}`} role="tabpanel" id="sim-panel" aria-labelledby={`sim-tab-${scenario.id}`}>
           <div className={styles.viewport}>
             <LazyVideo key={scenario.id} className={styles.viewportVideo} controls muted playsInline preload="none"
               poster={scenario.video.poster} aria-label={scenario.title}>
               <source src={scenario.video.src} type="video/mp4" />
             </LazyVideo>
           </div>
-          <div className={styles.scenarioCopy}>
+          <div className={`du-card-body ${styles.scenarioCopy}`}>
             <h3>{scenario.title}</h3>
             <p>{scenario.desc}</p>
             <dl className={styles.readouts}>
@@ -645,10 +645,10 @@ function Closing() {
   );
 }
 
-export default function HomePage() {
+export default function HomePage({ fontClassName }: { fontClassName: string }) {
   return (
     <MotionConfig reducedMotion="user">
-      <div className={styles.page}>
+      <div className={`${styles.page} ${fontClassName}`}>
         <Navbar linkArrow={<Icon name="arrow-right" />} />
 
         <main data-theme="spaceborn">
