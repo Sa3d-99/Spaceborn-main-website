@@ -519,10 +519,10 @@ function Hero() {
 }
 
 const PLATFORM_LAYERS = [
-  { name: 'AI', icon: Brain },
-  { name: 'Software', icon: Code2 },
-  { name: 'Simulation', icon: Layers3 },
-  { name: 'Hardware', icon: Cpu },
+  { name: 'AI', icon: Brain, desc: 'Turn operator intent into actions the machine can execute.' },
+  { name: 'Software', icon: Code2, desc: 'Run the control logic and process the data from onboard sensors.' },
+  { name: 'Simulation', icon: Layers3, desc: 'Repeat the same scenario to see how a change affects performance.' },
+  { name: 'Hardware', icon: Cpu, desc: 'Connect controllers, onboard compute, and motors on the physical machine.' },
 ];
 
 function TheProblem() {
@@ -531,21 +531,22 @@ function TheProblem() {
       <div className={styles.container}>
         <SectionHead
           title="AUTONOMY IS FRAGMENTED."
-          lede="Different hardware. Different software. Different validation. Whether you're building a drone, rover, robot, or industrial machine, your team ends up rebuilding the same infrastructure."
+          lede="A drone, a rover, and an industrial robot do different jobs, yet their teams face the same integration work. They have to connect sensors and controllers, adapt software to the machine, and set up tests to see how it behaves. When these pieces live in separate tools, each new machine can mean rebuilding much of the same stack."
         />
         <Reveal className={styles.platformBridge}>
           <ul className={styles.platformLayers}>
-            {PLATFORM_LAYERS.map(({ name, icon: Icon }) => (
+            {PLATFORM_LAYERS.map(({ name, icon: Icon, desc }) => (
               <li key={name} className="du-card du-card-border">
                 <Icon size={32} strokeWidth={1.25} aria-hidden="true" />
                 <span>{name}</span>
+                <p>{desc}</p>
               </li>
             ))}
           </ul>
           <div className={styles.platformConnection} aria-hidden="true" />
           <div className={`du-card du-card-border du-card-body ${styles.platformSummary}`}>
             <h3 className="du-card-title">ONE CONNECTED SPACEBORN PLATFORM</h3>
-            <p>From simulation to deployment, bring the stack together and focus on what your machine needs to do.</p>
+            <p>Spaceborn brings those four layers into a single workflow. Test how the control software responds in a simulated environment, then carry that work forward as you validate it on real hardware. Your team can spend more time on what makes the machine unique.</p>
           </div>
         </Reveal>
       </div>
@@ -554,12 +555,30 @@ function TheProblem() {
 }
 
 const ADVANTAGES = [
-  { title: 'Build faster', icon: Gauge, desc: 'Accelerate development with high-fidelity simulation and real-world validation. Reduce development time, cost, and risk.' },
-  { title: 'More accurate', icon: Target, desc: 'Test physical dynamics and real-world conditions, with AI-driven insights to help you make decisions you can trust.' },
-  { title: 'All-in-one platform', icon: Workflow, desc: 'Connect simulation, software, AI, and hardware in one workflow, from the first test to deployment.' },
-  { title: 'Built for real machines', icon: Cpu, desc: 'Develop for physical autonomous systems, with hardware integration and real-world testing at the core.' },
-  { title: 'Powered by intelligence', icon: Network, desc: 'Use AI-driven simulation, analysis, and optimization to understand results and make smarter decisions.' },
-  { title: "Ready for what's next", icon: Globe2, desc: 'Build on a connected foundation that supports your journey from research to larger deployments.' },
+  {
+    title: 'Build faster', icon: Gauge,
+    desc: 'Test changes in simulation before booking time on a physical prototype. Reproduce problems, rerun the same scenario after a fix, and use your time on the real machine to check the changes that matter most.',
+  },
+  {
+    title: 'More accurate', icon: Target,
+    desc: 'Test how a machine behaves when conditions change, such as when a drone loses satellite positioning. Use repeatable scenarios and telemetry to understand where the software performs as expected and where it needs more validation.',
+  },
+  {
+    title: 'All-in-one platform', icon: Workflow,
+    desc: 'Use Certanity to test scenarios, ANSA to run the machine, and DERYK to turn operator intent into action. Connecting these tools with Spaceborn hardware gives teams a workflow they can follow from an early simulation through real-world testing.',
+  },
+  {
+    title: 'Built for real machines', icon: Cpu,
+    desc: 'Work with the components a physical machine depends on, from flight controllers and motor controllers to onboard compute. Ground Control mirrors live attitude and telemetry in a digital twin, giving operators a view of what the machine is doing.',
+  },
+  {
+    title: 'Powered by intelligence', icon: Network,
+    desc: 'Use AI to interpret operator intent and analyze simulation results. When a test exposes a problem, the team can review what happened, adjust the software or mission, and repeat the scenario to see what changed.',
+  },
+  {
+    title: "Ready for what's next", icon: Globe2,
+    desc: 'Start with a research prototype or a single machine. As the project grows, bring forward the scenarios, control software, and hardware experience your team has already built, then adapt them for new machines and environments.',
+  },
 ];
 
 function WhySpaceborn() {
@@ -568,7 +587,7 @@ function WhySpaceborn() {
       <div className={styles.container}>
         <SectionHead
           title="WHY SPACEBORN?"
-          lede="Faster simulations. Smarter decisions. A stronger tomorrow. One connected workflow helps your team move from an idea to a machine that works in the real world."
+          lede="Building an autonomous machine means coordinating simulation, software, and hardware at every stage. Teams choose Spaceborn to bring those stages into one workflow, find problems earlier, and carry what they learn in simulation into hardware testing and deployment."
         />
         <div className={styles.advantages}>
           {ADVANTAGES.map(({ title, icon: Icon, desc }) => (
@@ -729,7 +748,7 @@ function ProductGrid() {
         <SectionHead
           number={1}
           title="ONE STACK FOR EVERY PHYSICAL MACHINE"
-          lede="ANSA runs your machine. DERYK turns intent into action. Certanity validates it in simulation. Spaceborn hardware brings it into the real world. Explore the products that connect the workflow."
+          lede="Each product has a role in getting the machine into the field. ANSA runs the control software, DERYK translates operator intent into machine actions, and Certanity lets engineers test those behaviors in simulation. Flight controllers, motor controllers, and onboard compute bring the workflow onto physical hardware."
         />
         <div className={styles.tiles}>
           {TILES.map((tile) => (
@@ -762,7 +781,7 @@ function HardwareLab() {
         <SectionHead
           number={2}
           title="FLIGHT CONTROLLERS"
-          lede="Bring your autonomy stack onto real hardware. Compare ELARA flight controllers and the ARIA 50A speed controller, then explore the full specifications for your build."
+          lede="Flight controllers run the control software, and electronic speed controllers drive the motors. Compare the ELARA boards that run ANSA and the ARIA 50A speed controller that feeds live current readings back to the flight controller. Open the specifications to see what fits your build."
         />
 
         <Reveal>
@@ -865,7 +884,7 @@ function RealityEngine() {
         <SectionHead
           number={3}
           title="PROVE IT BEFORE YOU DEPLOY IT"
-          lede="Certanity's 24+ domain simulators test the same autonomy stack that runs on your hardware. Explore navigation, swarm coordination, and industrial inspection before moving into the field."
+          lede="Certanity offers 24+ simulation domains for testing the autonomy stack that runs on your hardware. The examples below show how teams can test navigation when GPS is unavailable, observe coordination across multiple machines, and verify an inspection workflow before moving it onto the factory floor."
         />
 
         <Reveal className={styles.engine}>
@@ -1038,6 +1057,10 @@ function Closing({ onResume }: { onResume: () => void }) {
       <div className={`${styles.container} ${styles.closingInner}`}>
         <Reveal>
           <h2 className={styles.closingTitle}>BUILD THE AUTONOMOUS MACHINE FUTURE WITH US</h2>
+          <p className={`${styles.sectionLede} ${styles.closingLede}`}>
+            Tell our engineering team what you’re building and where you need help, whether you’re choosing
+            hardware, planning simulation tests, or preparing a prototype for field trials.
+          </p>
         </Reveal>
         <Reveal className={styles.ctaRow} delay={0.06}>
           <motion.div whileTap={PRESS} transition={SPRING}>
@@ -1045,7 +1068,7 @@ function Closing({ onResume }: { onResume: () => void }) {
               href="https://www.linkedin.com/in/adarsh-kumar-ab8111377?originalSubdomain=in"
               target="_blank"
               rel="noopener noreferrer"
-              className={`du-btn du-btn-primary ${styles.ctaButton}`}
+              className={`du-btn du-btn-primary ${styles.ctaButton} ${styles.ctaPrimary}`}
             >
               Contact engineering
             </a>

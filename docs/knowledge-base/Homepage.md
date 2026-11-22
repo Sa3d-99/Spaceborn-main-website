@@ -15,7 +15,7 @@ video tiles, and Next.js implementation. They authorized pushing to
 - Explain Spaceborn's six benefits: faster development, accuracy, an integrated
   platform, hardware focus, AI insights, and growth from research to deployment.
 - Remove section and product eyebrow labels. Show the existing three product
-  sections with the plain numbers `1`, `2`, and `3`, beside their headings.
+  sections with the plain numbers `1`, `2`, and `3`, at the same size as their headings.
 - Show product descriptions and explanatory paragraphs on both desktop and mobile.
 - Keep media URLs, tile order and sizing, product links, hardware specifications,
   hardware tabs, simulation scenes, navigation, footer, and resume flow intact.
@@ -30,6 +30,12 @@ buttons, and resume dialog controls. The stylesheet is imported by `app/page.tsx
 and uses a `du-` prefix and the local Spaceborn theme. CSS Modules keep the media
 layout and overlays. React still controls the hardware and scenario selections,
 and the resume form uses a native dialog with daisyUI styling.
+
+Homepage copy explains the job of each platform layer and gives concrete
+examples of the six benefits. Section headings and intro text are centered
+above the full-width content. The Contact engineering link sets the daisyUI
+primary text color explicitly because the shared link rule otherwise takes
+precedence over the layered button style.
 
 ## Evidence
 
