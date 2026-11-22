@@ -76,7 +76,7 @@ export const DROPDOWN_NAV: Record<DropdownKey, { label: string; items: NavItem[]
 
 const CLOSE_DELAY_MS = 150;
 
-export default function Navbar({ dropdownArrow = '→' }: { dropdownArrow?: ReactNode }) {
+export default function Navbar({ linkArrow }: { linkArrow?: ReactNode }) {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [hidden, setHidden] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -222,7 +222,7 @@ export default function Navbar({ dropdownArrow = '→' }: { dropdownArrow?: Reac
                               onClick={() => setOpenDropdown(null)}
                             >
                               <span className="nav-item-label">{item.label}</span>
-                              <span className="nav-item-arrow" aria-hidden="true">{dropdownArrow}</span>
+                              <span className="nav-item-arrow" aria-hidden="true">{linkArrow ?? '→'}</span>
                             </Link>
                           ) : (
                             <a
@@ -231,7 +231,7 @@ export default function Navbar({ dropdownArrow = '→' }: { dropdownArrow?: Reac
                               onClick={() => setOpenDropdown(null)}
                             >
                               <span className="nav-item-label">{item.label}</span>
-                              <span className="nav-item-arrow" aria-hidden="true">{dropdownArrow}</span>
+                              <span className="nav-item-arrow" aria-hidden="true">{linkArrow ?? '→'}</span>
                             </a>
                           )}
                         </li>
@@ -251,7 +251,7 @@ export default function Navbar({ dropdownArrow = '→' }: { dropdownArrow?: Reac
               role="menuitem"
             >
               <span>DERYK</span>
-              <span className="nav-external-arrow" aria-hidden="true">↗</span>
+              <span className="nav-external-arrow" aria-hidden="true">{linkArrow ?? '↗'}</span>
             </a>
           </li>
           <li className="nav-standalone-item" role="none">
@@ -263,7 +263,7 @@ export default function Navbar({ dropdownArrow = '→' }: { dropdownArrow?: Reac
               role="menuitem"
             >
               <span>KHONSU</span>
-              <span className="nav-external-arrow" aria-hidden="true">↗</span>
+              <span className="nav-external-arrow" aria-hidden="true">{linkArrow ?? '↗'}</span>
             </a>
           </li>
         </ul>

@@ -39,8 +39,9 @@ precedence over the layered button style.
 The platform diagram spans most of the homepage width with daisyUI side cards and
 a centered summary. The hardware selector keeps its boxed daisyUI tabs in a
 centered row. Product and hardware documentation links use Font Awesome's solid
-circle arrow. Homepage navigation dropdowns use its plain right arrow. Both load
-from Font Awesome Free's packaged `all.min.css` webfont stylesheet.
+circle arrow. Homepage navigation dropdowns and the DERYK and KHONSU links use
+its plain right arrow. Both load from Font Awesome Free's packaged `all.min.css`
+webfont stylesheet.
 
 ## Evidence
 

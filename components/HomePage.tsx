@@ -1081,7 +1081,7 @@ export default function HomePage() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <Navbar dropdownArrow={<i className="fa-solid fa-arrow-right" />} />
+      <Navbar linkArrow={<i className="fa-solid fa-arrow-right" />} />
 
       <main className={styles.page} data-theme="spaceborn">
         <Hero />
