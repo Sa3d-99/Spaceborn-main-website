@@ -24,11 +24,14 @@
     "three": "^0.186.1"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.5",
     "@types/node": "latest",
     "@types/nodemailer": "^8.0.1",
     "@types/pg": "^8.20.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "daisyui": "^5.8.2",
+    "tailwindcss": "^4.3.5",
     "typescript": "latest"
   }
 }

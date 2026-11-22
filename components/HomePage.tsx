@@ -425,7 +425,7 @@ function HeroTitleCodeDecode({ inView }: { inView: boolean }) {
               const charStart = lineDelay + k * 52;
               const charLock = charStart + 300;
 
-              const isResolved = isCompleted || reduceMotion || elapsed >= charLock;
+              const isResolved = isCompleted || elapsed >= charLock;
               const isWave = !isResolved && elapsed >= charStart;
               const isHidden = !isResolved && !isWave;
 
@@ -487,7 +487,7 @@ function Hero() {
 
   return (
     <section ref={sectionRef} className={styles.hero} id="releases">
-      <div className={styles.heroFrame}>
+      <div className={`du-hero ${styles.heroFrame}`}>
         <video
           ref={videoRef}
           className={styles.heroVideo}
@@ -502,9 +502,9 @@ function Hero() {
           <source src={cldVideo('v1785962155/droneCircuitVid_p16yvl', 720)} type="video/mp4" media="(max-width: 720px)" />
           <source src={cldVideo('v1785962155/droneCircuitVid_p16yvl', 1920)} type="video/mp4" />
         </video>
-        <div className={styles.heroVignette} />
+        <div className={`du-hero-overlay ${styles.heroVignette}`} />
 
-        <div className={styles.heroContent}>
+        <div className={`du-hero-content ${styles.heroContent}`}>
           <h1 className={styles.heroTitle}>
             <HeroTitleCodeDecode inView={inView} />
           </h1>
@@ -536,15 +536,15 @@ function TheProblem() {
         <Reveal className={styles.platformBridge}>
           <ul className={styles.platformLayers}>
             {PLATFORM_LAYERS.map(({ name, icon: Icon }) => (
-              <li key={name}>
+              <li key={name} className="du-card du-card-border">
                 <Icon size={32} strokeWidth={1.25} aria-hidden="true" />
                 <span>{name}</span>
               </li>
             ))}
           </ul>
           <div className={styles.platformConnection} aria-hidden="true" />
-          <div className={styles.platformSummary}>
-            <h3>ONE CONNECTED SPACEBORN PLATFORM</h3>
+          <div className={`du-card du-card-border du-card-body ${styles.platformSummary}`}>
+            <h3 className="du-card-title">ONE CONNECTED SPACEBORN PLATFORM</h3>
             <p>From simulation to deployment, bring the stack together and focus on what your machine needs to do.</p>
           </div>
         </Reveal>
@@ -572,9 +572,9 @@ function WhySpaceborn() {
         />
         <div className={styles.advantages}>
           {ADVANTAGES.map(({ title, icon: Icon, desc }) => (
-            <Reveal key={title} className={styles.advantage}>
+            <Reveal key={title} className={`du-card du-card-body ${styles.advantage}`}>
               <Icon size={28} strokeWidth={1.25} aria-hidden="true" />
-              <h3>{title}</h3>
+              <h3 className="du-card-title">{title}</h3>
               <p>{desc}</p>
             </Reveal>
           ))}
@@ -681,18 +681,16 @@ function ProductTile({ tile }: { tile: Tile }) {
         )}
       </div>
       <div className={styles.tileScrim} />
-      <div className={styles.tileText}>
-        <h3 className={styles.tileTitle}>{tile.name}</h3>
-        <div className={styles.tileDescWrap}>
-          <p className={styles.tileDesc}>{tile.desc}</p>
-        </div>
+      <div className={`du-card-body ${styles.tileText}`}>
+        <h3 className={`du-card-title ${styles.tileTitle}`}>{tile.name}</h3>
+        <p className={styles.tileDesc}>{tile.desc}</p>
       </div>
       <ArrowIcon className={styles.tileArrow} />
     </>
   );
 
   const handlers = { onPointerEnter: start, onFocus: start };
-  const className = `${styles.tile} ${styles[tile.size]} ${isGcs ? styles.tileGcs : ''}`;
+  const className = `du-card du-card-border ${styles.tile} ${isGcs ? styles.tileGcs : ''}`;
 
   return (
     <div ref={tileRef} className={`${styles.tileCell} ${styles[tile.size]}`} data-tile={tile.id}>
@@ -764,7 +762,7 @@ function HardwareLab() {
         />
 
         <Reveal>
-        <div className={styles.tabs} role="tablist" aria-label="Hardware" onKeyDown={onKeyDown}>
+        <div className={`du-tabs du-tabs-box ${styles.tabs}`} role="tablist" aria-label="Hardware" onKeyDown={onKeyDown}>
           {BOARDS.map((b, i) => (
             <button
               key={b.id}
@@ -777,16 +775,15 @@ function HardwareLab() {
               aria-selected={i === active}
               aria-controls="hw-panel"
               tabIndex={i === active ? 0 : -1}
-              className={`${styles.tab} ${i === active ? styles.tabActive : ''}`}
+              className={`du-tab ${styles.tab} ${i === active ? 'du-tab-active' : ''}`}
               onClick={() => setActive(i)}
             >
-              {i === active && <motion.span layoutId="hw-tab-pill" className={styles.tabPill} transition={SPRING} />}
-              <span className={styles.tabLabel}>{b.tab}</span>
+              {b.tab}
             </button>
           ))}
         </div>
 
-        <div className={styles.lab} role="tabpanel" id="hw-panel" aria-labelledby={`hw-tab-${board.id}`}>
+        <div className={`du-card du-card-border ${styles.lab}`} role="tabpanel" id="hw-panel" aria-labelledby={`hw-tab-${board.id}`}>
           <div className={styles.labMedia}>
             <AnimatePresence initial={false}>
               <motion.img
@@ -808,16 +805,16 @@ function HardwareLab() {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={board.id}
-              className={styles.labBody}
+              className={`du-card-body ${styles.labBody}`}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
             >
-              <h3 className={styles.labTitle}>{board.name}</h3>
+              <h3 className={`du-card-title ${styles.labTitle}`}>{board.name}</h3>
               <p className={styles.labKind}>{board.kind}</p>
               <p className={styles.labDesc}>{board.desc}</p>
-              <table className={styles.specTable}>
+              <table className={`du-table ${styles.specTable}`}>
                 <thead>
                   <tr>
                     <th scope="col">Parameter</th>
@@ -833,7 +830,7 @@ function HardwareLab() {
                   ))}
                 </tbody>
               </table>
-              <Link href={board.href} className={styles.labLink}>
+              <Link href={board.href} className={`du-btn du-btn-link ${styles.labLink}`}>
                 Full documentation
                 <ArrowIcon className={styles.labLinkIcon} />
               </Link>
@@ -869,10 +866,10 @@ function RealityEngine() {
 
         <Reveal className={styles.engine}>
           <div
-            className={styles.viewport}
+            className={`du-card du-card-border ${styles.viewport}`}
             role="tabpanel"
             id="sim-panel"
-            aria-labelledby={`sim-tab-${scenario.id}`}
+            aria-label={scenario.title}
             onPointerEnter={() => setHovering(true)}
             onPointerLeave={() => setHovering(false)}
           >
@@ -904,25 +901,21 @@ function RealityEngine() {
             {/* Preserved Line Progress directly on top of the video */}
             <div className={styles.simLineProgress}>
               {SCENARIOS.map((s, i) => (
-                <div
+                <button
                   key={s.id}
+                  type="button"
                   className={styles.simSegmentTrack}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActive(i);
-                  }}
-                  role="button"
-                  tabIndex={0}
+                  onClick={() => setActive(i)}
                   aria-label={`Switch to ${s.title}`}
                 >
-                  <div
+                  <span
                     className={`${styles.simSegmentFill} ${
                       i < active ? styles.simSegmentDone : i === active ? styles.simSegmentActive : ''
                     } ${!inView || hovering ? styles.progressPaused : ''}`}
                     style={i === active ? { animationDuration: `${CYCLE_MS}ms` } : undefined}
                     onAnimationEnd={i === active ? () => setActive((a) => (a + 1) % SCENARIOS.length) : undefined}
                   />
-                </div>
+                </button>
               ))}
             </div>
 
@@ -936,7 +929,7 @@ function RealityEngine() {
           </div>
 
           {/* Scenario Tabs OUTSIDE the video overlay for mobile view (styled exactly like Flight Controller tabs) */}
-          <div className={styles.simMobileTabs} role="tablist" aria-label="Simulation scenarios">
+          <div className={`du-tabs du-tabs-box ${styles.tabs} ${styles.simMobileTabs}`} role="tablist" aria-label="Simulation scenarios">
             {SCENARIOS.map((s, i) => {
               const label = i === 0 ? 'GPS-DENIED' : i === 1 ? '128 SWARM' : 'INSPECTION';
               return (
@@ -944,20 +937,12 @@ function RealityEngine() {
                   key={s.id}
                   type="button"
                   role="tab"
-                  id={`sim-mob-tab-${s.id}`}
                   aria-selected={i === active}
-                  tabIndex={i === active ? 0 : -1}
-                  className={`${styles.simMobileTab} ${i === active ? styles.simMobileTabActive : ''}`}
+                  aria-controls="sim-panel"
+                  className={`du-tab ${styles.tab} ${i === active ? 'du-tab-active' : ''}`}
                   onClick={() => setActive(i)}
                 >
-                  {i === active && (
-                    <motion.span
-                      layoutId="sim-mobile-tab-pill"
-                      className={styles.simMobileTabPill}
-                      transition={SPRING}
-                    />
-                  )}
-                  <span className={styles.simMobileTabLabel}>{label}</span>
+                  {label}
                 </button>
               );
             })}
@@ -969,10 +954,9 @@ function RealityEngine() {
                 key={s.id}
                 type="button"
                 role="tab"
-                id={`sim-tab-${s.id}`}
                 aria-selected={i === active}
                 aria-controls="sim-panel"
-                className={`${styles.simTab} ${i === active ? styles.simTabActive : ''}`}
+                className={`du-card du-card-border du-card-body ${styles.simTab}`}
                 onClick={() => setActive(i)}
                 whileTap={PRESS}
                 transition={SPRING}
@@ -1057,12 +1041,12 @@ function Closing({ onResume }: { onResume: () => void }) {
               href="https://www.linkedin.com/in/adarsh-kumar-ab8111377?originalSubdomain=in"
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.btnPrimary}
+              className={`du-btn du-btn-primary ${styles.ctaButton}`}
             >
               Contact engineering
             </a>
           </motion.div>
-          <motion.button type="button" className={styles.btnGhost} onClick={onResume} whileTap={PRESS} transition={SPRING}>
+          <motion.button type="button" className={`du-btn du-btn-outline ${styles.ctaButton}`} onClick={onResume} whileTap={PRESS} transition={SPRING}>
             Share your resume
           </motion.button>
         </Reveal>
@@ -1078,7 +1062,7 @@ export default function HomePage() {
     <MotionConfig reducedMotion="user">
       <Navbar />
 
-      <main className={styles.page}>
+      <main className={styles.page} data-theme="spaceborn">
         <Hero />
         <TheProblem />
         <ProductGrid />

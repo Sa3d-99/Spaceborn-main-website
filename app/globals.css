@@ -1792,68 +1792,31 @@ a {
 }
 
 /* Resume Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+.resume-dialog {
+  border: 0;
+}
+
+.resume-dialog::backdrop {
+  display: block;
   background: rgba(1, 1, 1, 0.85);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .modal-container {
-  background: #0d0d0d;
+  color: var(--color-base-content);
+  width: calc(100% - 40px);
+  max-width: 580px;
+  max-height: 90dvh;
+  padding: 0;
   border: 1px solid var(--border-c);
   border-radius: 4px;
-  width: 100%;
-  max-width: 580px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.modal-container::-webkit-scrollbar {
-  width: 6px;
-}
-.modal-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-.modal-container::-webkit-scrollbar-thumb {
-  background: var(--border-c);
-  border-radius: 3px;
+  scrollbar-color: var(--border-c) transparent;
 }
 
 .modal-close-btn {
   position: absolute;
   top: 24px;
   right: 24px;
-  background: transparent;
-  border: 1px solid var(--border-c);
-  color: var(--text);
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 10;
-}
-
-.modal-close-btn:hover {
-  border-color: var(--text);
-  background: rgba(241, 242, 236, 0.05);
-  box-shadow: 0 0 10px rgba(241, 242, 236, 0.1);
 }
 
 .modal-body {
@@ -1861,6 +1824,7 @@ a {
 }
 
 .modal-title {
+  padding-right: 36px;
   font-size: clamp(20px, 2.5vw, 24px);
   margin-top: 0;
   margin-bottom: 8px;
@@ -1892,25 +1856,9 @@ a {
 }
 
 .form-input {
-  background: #141414;
-  border: 1px solid var(--border-c);
-  color: var(--text);
-  padding: 12px 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  outline: none;
-  transition: all 0.3s ease;
   width: 100%;
-}
-
-.form-input:focus {
-  border-color: var(--text);
-  background: #181818;
-}
-
-.form-input::placeholder {
-  color: rgba(241, 242, 236, 0.2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875rem;
 }
 
 .form-textarea {
@@ -1980,31 +1928,14 @@ a {
   white-space: nowrap;
 }
 
-.selected-file-remove {
-  background: transparent;
-  border: none;
-  color: var(--dim);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  transition: color 0.3s ease;
-}
-
 .selected-file-remove:hover {
   color: var(--red);
 }
 
 .form-error-banner {
-  background: rgba(229, 72, 72, 0.1);
-  border: 1px solid var(--red);
-  color: var(--text);
-  padding: 12px 16px;
-  font-size: 12px;
-  font-family: 'IBM Plex Mono', monospace;
   margin-bottom: 20px;
-  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875rem;
 }
 
 .success-state {
@@ -2035,22 +1966,6 @@ a {
   margin-bottom: 30px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -2064,7 +1979,8 @@ a {
 
 @media (max-width: 580px) {
   .modal-container {
-    max-height: 100vh;
+    width: 100%;
+    max-height: 100dvh;
     height: 100%;
     border-radius: 0;
     border: none;

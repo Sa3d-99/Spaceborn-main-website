@@ -14,16 +14,20 @@ Follow these instructions to set up the project locally for development and test
 
 ### Prerequisites
 
-Ensure you have [Node.js](https://nodejs.org/) installed (v18.x or later is recommended).
+Install [Node.js](https://nodejs.org/) 20.9 or newer and npm.
 
 ### Installation
 
-Clone the repository and install the project dependencies:
+From the repository root, install the locked dependencies and start the dev server.
 
 ```bash
-# Install package dependencies
-npm install
+npm ci
+npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000). The homepage preview requires
+no environment variables. To test the production build locally, stop the dev
+server and run `npm run build` followed by `npm run start`.
 
 ### Development Scripts
 

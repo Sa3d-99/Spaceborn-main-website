@@ -10,6 +10,9 @@ products. It uses Next.js App Router, React, TypeScript, and vanilla CSS.
 - `app/page.tsx` renders `components/HomePage.tsx` and owns homepage metadata.
 - `app/layout.tsx` owns shared metadata, global styles, and `PageTransition`.
 - `components/HomePage.module.css` scopes the homepage design.
+- `app/home-daisyui.css` builds prefixed daisyUI components via Tailwind and
+  `postcss.config.mjs`. The `spaceborn` theme applies to the homepage and its
+  resume dialog. Tailwind Preflight is omitted to preserve other route styles.
 - `components/Navbar.tsx`, `Footer.tsx`, and `ResumeModal.tsx` provide shared UI.
 - Other route trees cover company, systems, platforms, industries, simulation,
   DERYK, launches, and certificate verification.
@@ -25,7 +28,7 @@ existing Cloudinary URLs; fonts and partner logos live under `public/`.
 
 ## Setup and verification
 
-Use a current Node.js version compatible with the pinned Next.js release. CI
+Use Node.js 20.9 or newer for the pinned Next.js release. CI
 uses Node 20; the November 2026 homepage checks ran on Node 22.
 
 ```sh

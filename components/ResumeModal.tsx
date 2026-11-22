@@ -18,31 +18,24 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Close on Escape key press
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    // Prevent body scrolling when modal is open
+    const dialog = modalRef.current;
+    const previousOverflow = document.body.style.overflow;
+    dialog?.showModal();
     document.body.style.overflow = 'hidden';
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
 
-  // Click outside to close handler
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
-    }
+    return () => {
+      dialog?.close();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  const closeDialog = () => {
+    modalRef.current?.close();
+    onClose();
   };
 
   const validateFile = (selectedFile: File): boolean => {
@@ -65,17 +58,17 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
     return true;
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (e: DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsDragging(false);
   };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsDragging(false);
     
@@ -152,11 +145,23 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
   };
 
   return (
-    <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal-container" ref={modalRef}>
+    <dialog
+      ref={modalRef}
+      data-theme="spaceborn"
+      className="du-modal resume-dialog"
+      aria-labelledby="resume-modal-title"
+      onCancel={(event) => {
+        event.preventDefault();
+        closeDialog();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) closeDialog();
+      }}
+    >
+      <div className="du-modal-box modal-container">
         <button 
-          className="modal-close-btn" 
-          onClick={onClose} 
+          className="du-btn du-btn-square du-btn-sm du-btn-outline modal-close-btn"
+          onClick={closeDialog}
           aria-label="Close modal"
           type="button"
         >
@@ -169,11 +174,11 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
         <div className="modal-body">
           {!isSuccess ? (
             <>
-              <h2 className="modal-title font-ethno">Share Your Resume</h2>
+              <h2 id="resume-modal-title" className="modal-title font-ethno">Share Your Resume</h2>
               <p className="modal-subtitle font-mono">Join the Spaceborn crew. Send us your background information and resume to start the conversation.</p>
 
               {error && (
-                <div className="form-error-banner">
+                <div role="alert" className="du-alert du-alert-error form-error-banner">
                   {error}
                 </div>
               )}
@@ -184,7 +189,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                   <input
                     type="text"
                     id="fullName"
-                    className="form-input"
+                    className="du-input form-input"
                     placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -198,7 +203,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                   <input
                     type="email"
                     id="email"
-                    className="form-input"
+                    className="du-input form-input"
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -212,7 +217,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                   <input
                     type="tel"
                     id="phone"
-                    className="form-input"
+                    className="du-input form-input"
                     placeholder="+1 (555) 000-0000"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -224,7 +229,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                   <label htmlFor="message" className="form-label">Cover Note / Message</label>
                   <textarea
                     id="message"
-                    className="form-input form-textarea"
+                    className="du-textarea form-input form-textarea"
                     placeholder="Tell us briefly why you want to build the future of autonomy with Spaceborn..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -233,7 +238,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                 </div>
 
                 <div className="form-group" style={{ marginBottom: '30px' }}>
-                  <label className="form-label">Resume / CV *</label>
+                  <span className="form-label">Resume / CV *</span>
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -244,21 +249,23 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                   />
                   
                   {!file ? (
-                    <div 
+                    <button
+                      type="button"
                       className={`file-dropzone ${isDragging ? 'dragover' : ''}`}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
-                      onClick={() => !isSubmitting && fileInputRef.current?.click()}
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isSubmitting}
                     >
                       <svg className="file-dropzone-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                         <polyline points="17 8 12 3 7 8" />
                         <line x1="12" y1="3" x2="12" y2="15" />
                       </svg>
-                      <div className="file-dropzone-text font-mono">DRAG & DROP YOUR FILE OR CLICK TO BROWSE</div>
-                      <div className="file-dropzone-subtext font-mono">SUPPORTED TYPES: PDF, DOCX, DOC (MAX 10MB)</div>
-                    </div>
+                      <span className="file-dropzone-text font-mono">DRAG & DROP YOUR FILE OR CLICK TO BROWSE</span>
+                      <span className="file-dropzone-subtext font-mono">SUPPORTED TYPES: PDF, DOCX, DOC (MAX 10MB)</span>
+                    </button>
                   ) : (
                     <div className="selected-file-container">
                       <div className="selected-file-info font-mono">
@@ -273,7 +280,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                       </div>
                       <button 
                         type="button" 
-                        className="selected-file-remove" 
+                      className="du-btn du-btn-ghost du-btn-square du-btn-sm selected-file-remove"
                         onClick={handleRemoveFile}
                         disabled={isSubmitting}
                         aria-label="Remove uploaded resume"
@@ -291,7 +298,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
 
                 <button 
                   type="submit" 
-                  className="btn font-mono btn-primary" 
+                  className="du-btn du-btn-primary font-mono"
                   style={{ width: '100%', height: '48px' }}
                   disabled={isSubmitting}
                 >
@@ -307,15 +314,15 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                   <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
               </div>
-              <h2 className="success-title font-ethno">Transmission Verified</h2>
+              <h2 id="resume-modal-title" className="success-title font-ethno">Transmission Verified</h2>
               <p className="success-message font-mono">
                 Thank you, {name}. Your application was successfully processed and saved. Our recruiting team will review your credentials and be in touch soon.
               </p>
               <button 
                 type="button" 
-                className="btn font-mono btn-primary" 
+                className="du-btn du-btn-primary font-mono"
                 style={{ minWidth: '160px' }}
-                onClick={onClose}
+                onClick={closeDialog}
               >
                 CLOSE
               </button>
@@ -323,6 +330,6 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
           )}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

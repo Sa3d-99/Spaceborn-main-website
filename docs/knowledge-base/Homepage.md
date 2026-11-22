@@ -25,6 +25,12 @@ video tiles, and Next.js implementation. They authorized pushing to
 Rendered order: Hero → TheProblem → ProductGrid → WhySpaceborn → HardwareLab →
 RealityEngine → Closing. Shared navigation and footer surround the page.
 
+The homepage uses daisyUI for the hero, cards, tabs, specifications table,
+buttons, and resume dialog controls. The stylesheet is imported by `app/page.tsx`
+and uses a `du-` prefix and the local Spaceborn theme. CSS Modules keep the media
+layout and overlays. React still controls the hardware and scenario selections,
+and the resume form uses a native dialog with daisyUI styling.
+
 ## Evidence
 
 The supplied three slide images describe the fragmented stack, repeated
