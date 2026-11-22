@@ -4,6 +4,7 @@ import { LazyVideo } from "./LazyVideo";
 import { useState, useEffect, useRef, type KeyboardEvent, type ReactNode, type RefObject } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
+import { Brain, Code2, Cpu, Gauge, Globe2, Layers3, Network, Target, Workflow } from 'lucide-react';
 import ResumeModal from './ResumeModal';
 import Footer from './Footer';
 import Navbar from './Navbar';
@@ -25,7 +26,6 @@ const cldUserVid = (file: string) => `${CLD_USER}/video/upload/f_auto,q_auto:goo
 type Tile = {
   id: string;
   name: string;
-  tag?: string;
   desc: string;
   href: string;
   size: 'square' | 'wide' | 'tall';
@@ -40,8 +40,7 @@ const TILES: Tile[] = [
   {
     id: 'flight-controller',
     name: 'Flight Controller',
-    tag: 'AUTONOMY SILICON',
-    desc: 'ELARA boards from STM32F7 to STM32H7, running the ANSA autonomy stack through one HAL.',
+    desc: 'Flight control and onboard autonomy, powered by ANSA on ELARA hardware.',
     href: '/systems/flight-cont',
     size: 'wide',
     image: cldPoster('v1785868057/VideoProject_hzk4kg', 1600),
@@ -51,7 +50,6 @@ const TILES: Tile[] = [
   {
     id: 'elara',
     name: 'ELARA SB2',
-    tag: 'HIGH-PERFORMANCE H7',
     desc: 'High-performance STM32H7 flight controller.',
     href: '/systems/flight-cont',
     size: 'tall',
@@ -62,8 +60,7 @@ const TILES: Tile[] = [
   {
     id: 'aria',
     name: 'ARIA 50A',
-    tag: 'MOTOR ARCHITECTURE',
-    desc: 'AM32 electronic speed controller with live current telemetry.',
+    desc: 'Precise motor control with live current feedback to the flight controller.',
     href: '/systems/Esc-sys',
     size: 'square',
     image: `${CLD}/image/upload/f_auto,q_auto,w_900,c_limit/v1783382813/spaceborn_assets/ESC%2050A.png`,
@@ -73,8 +70,7 @@ const TILES: Tile[] = [
   {
     id: 'hpu',
     name: 'HPU',
-    tag: 'EDGE SENSOR FUSION',
-    desc: 'Multi-sensor AI edge compute for camera, LiDAR, radar, and GNSS.',
+    desc: 'Brings camera, LiDAR, radar, and GNSS data together for onboard AI.',
     href: '/systems/edgecompute',
     size: 'square',
     image: cldUserImg('hpu.webp'),
@@ -84,7 +80,6 @@ const TILES: Tile[] = [
   {
     id: 'deryk',
     name: 'DERYK',
-    tag: 'MISSION COGNITION',
     desc: 'Turns operator intent into executable machine action.',
     href: 'https://spaceborn-web.vercel.app/',
     size: 'wide',
@@ -95,8 +90,7 @@ const TILES: Tile[] = [
   {
     id: 'certanity',
     name: 'CERTANITY',
-    tag: 'SIMULATION RUNTIME',
-    desc: '24+ domain simulators. Every control loop is broken here before it flies.',
+    desc: 'Test and validate autonomous systems in 24+ simulation domains before deployment.',
     href: 'https://certanity.com/',
     size: 'square',
     image: cldPoster('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
@@ -107,7 +101,6 @@ const TILES: Tile[] = [
   {
     id: 'elio',
     name: 'SB ELIO',
-    tag: 'DUAL-MCU DEV BOARD',
     desc: 'Dual-MCU development board. ESP32-S3 and RP2350 on one platform.',
     href: '/systems/embedded-sdk',
     size: 'square',
@@ -118,8 +111,7 @@ const TILES: Tile[] = [
   {
     id: 'gcs',
     name: 'GROUND CONTROL',
-    tag: '50 HZ DIGITAL TWIN',
-    desc: 'Live attitude and telemetry from the airframe, mirrored on a 3D digital twin at 50 Hz.',
+    desc: 'Monitor live attitude and telemetry through a 3D digital twin at 50 Hz.',
     href: '/platforms/missionstudio',
     size: 'wide',
     image: cldUserImg('gcs-twin.webp'),
@@ -352,11 +344,11 @@ function Reveal({ children, className, delay = 0 }: { children: ReactNode; class
   );
 }
 
-function SectionHead({ eyebrow, title, lede }: { eyebrow?: string; title: string; lede: string }) {
+function SectionHead({ number, title, lede }: { number?: number; title: string; lede: string }) {
   return (
     <Reveal className={styles.sectionHead}>
       <div className={styles.sectionTitleBlock}>
-        {eyebrow && <span className={styles.sectionEyebrow}>{eyebrow}</span>}
+        {number !== undefined && <span className={styles.sectionNumber}>{number}</span>}
         <h2 className={styles.sectionTitle}>{title}</h2>
       </div>
       <p className={styles.sectionLede}>{lede}</p>
@@ -375,9 +367,11 @@ function ArrowIcon({ className }: { className?: string }) {
 const WAVE_GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>[]_';
 
 const HERO_LINES: string[][] = [
-  ['AUTONOMY,', 'FROM'],
-  ['THE', 'SILICON', 'UP'],
+  ['BUILD', 'AUTONOMOUS', 'MACHINES.'],
+  ['WITHOUT', 'REBUILDING', 'THE', 'STACK.'],
 ];
+
+const HERO_TITLE = HERO_LINES.map((words) => words.join(' ')).join(' ');
 
 function HeroTitleCodeDecode({ inView }: { inView: boolean }) {
   const reduceMotion = Boolean(useReducedMotion());
@@ -421,7 +415,7 @@ function HeroTitleCodeDecode({ inView }: { inView: boolean }) {
 
   return (
     <>
-      <span className={styles.srOnly}>AUTONOMY, FROM THE SILICON UP</span>
+      <span className={styles.srOnly}>{HERO_TITLE}</span>
       <span className={styles.decodeBoard} aria-hidden="true">
         {HERO_LINES.map((words, lineIdx) => {
           const renderedWords = words.map((word, wordIdx) => {
@@ -511,9 +505,79 @@ function Hero() {
         <div className={styles.heroVignette} />
 
         <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle} aria-label="AUTONOMY, FROM THE SILICON UP">
+          <h1 className={styles.heroTitle}>
             <HeroTitleCodeDecode inView={inView} />
           </h1>
+          <p className={styles.heroSub}>
+            Spaceborn brings AI, software, simulation, and hardware into one connected
+            platform. Build, test, and deploy autonomous machines with less repeated engineering.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const PLATFORM_LAYERS = [
+  { name: 'AI', icon: Brain },
+  { name: 'Software', icon: Code2 },
+  { name: 'Simulation', icon: Layers3 },
+  { name: 'Hardware', icon: Cpu },
+];
+
+function TheProblem() {
+  return (
+    <section className={styles.section} aria-label="The problem Spaceborn solves">
+      <div className={styles.container}>
+        <SectionHead
+          title="AUTONOMY IS FRAGMENTED."
+          lede="Different hardware. Different software. Different validation. Whether you're building a drone, rover, robot, or industrial machine, your team ends up rebuilding the same infrastructure."
+        />
+        <Reveal className={styles.platformBridge}>
+          <ul className={styles.platformLayers}>
+            {PLATFORM_LAYERS.map(({ name, icon: Icon }) => (
+              <li key={name}>
+                <Icon size={32} strokeWidth={1.25} aria-hidden="true" />
+                <span>{name}</span>
+              </li>
+            ))}
+          </ul>
+          <div className={styles.platformConnection} aria-hidden="true" />
+          <div className={styles.platformSummary}>
+            <h3>ONE CONNECTED SPACEBORN PLATFORM</h3>
+            <p>From simulation to deployment, bring the stack together and focus on what your machine needs to do.</p>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+const ADVANTAGES = [
+  { title: 'Build faster', icon: Gauge, desc: 'Accelerate development with high-fidelity simulation and real-world validation. Reduce development time, cost, and risk.' },
+  { title: 'More accurate', icon: Target, desc: 'Test physical dynamics and real-world conditions, with AI-driven insights to help you make decisions you can trust.' },
+  { title: 'All-in-one platform', icon: Workflow, desc: 'Connect simulation, software, AI, and hardware in one workflow, from the first test to deployment.' },
+  { title: 'Built for real machines', icon: Cpu, desc: 'Develop for physical autonomous systems, with hardware integration and real-world testing at the core.' },
+  { title: 'Powered by intelligence', icon: Network, desc: 'Use AI-driven simulation, analysis, and optimization to understand results and make smarter decisions.' },
+  { title: "Ready for what's next", icon: Globe2, desc: 'Build on a connected foundation that supports your journey from research to larger deployments.' },
+];
+
+function WhySpaceborn() {
+  return (
+    <section className={styles.section} id="why-spaceborn">
+      <div className={styles.container}>
+        <SectionHead
+          title="WHY SPACEBORN?"
+          lede="Faster simulations. Smarter decisions. A stronger tomorrow. One connected workflow helps your team move from an idea to a machine that works in the real world."
+        />
+        <div className={styles.advantages}>
+          {ADVANTAGES.map(({ title, icon: Icon, desc }) => (
+            <Reveal key={title} className={styles.advantage}>
+              <Icon size={28} strokeWidth={1.25} aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{desc}</p>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -618,7 +682,6 @@ function ProductTile({ tile }: { tile: Tile }) {
       </div>
       <div className={styles.tileScrim} />
       <div className={styles.tileText}>
-        {tile.tag && <span className={styles.tileTag}>{tile.tag}</span>}
         <h3 className={styles.tileTitle}>{tile.name}</h3>
         <div className={styles.tileDescWrap}>
           <p className={styles.tileDesc}>{tile.desc}</p>
@@ -662,9 +725,9 @@ function ProductGrid() {
     <section className={styles.section} id="platforms">
       <div className={styles.container}>
         <SectionHead
-          eyebrow="01 MODULAR SYSTEMS ARCHITECTURE"
+          number={1}
           title="ONE STACK FOR EVERY PHYSICAL MACHINE"
-          lede="ANSA runs the machine. DERYK decides what it should do. Certanity proves it in simulation before it moves. Spaceborn hardware carries it into the field, across air, ground, marine, and space."
+          lede="ANSA runs your machine. DERYK turns intent into action. Certanity validates it in simulation. Spaceborn hardware brings it into the real world. Explore the products that connect the workflow."
         />
         <div className={styles.tiles}>
           {TILES.map((tile) => (
@@ -695,9 +758,9 @@ function HardwareLab() {
     <section className={styles.section} id="systems">
       <div className={styles.container}>
         <SectionHead
-          eyebrow="02 EDGE COMPUTE & SILICON SPECIFICATIONS"
+          number={2}
           title="FLIGHT CONTROLLERS"
-          lede="Board-level parameters for the ELARA flight controller line and the ARIA 50A speed controller that pairs with it. Full documentation lives on each product page."
+          lede="Bring your autonomy stack onto real hardware. Compare ELARA flight controllers and the ARIA 50A speed controller, then explore the full specifications for your build."
         />
 
         <Reveal>
@@ -799,9 +862,9 @@ function RealityEngine() {
     <section ref={sectionRef} className={styles.section} id="simulation">
       <div className={styles.container}>
         <SectionHead
-          eyebrow="03 KERNEL SIMULATION RUNTIME"
-          title="ANSA REALITY ENGINE"
-          lede="Scenario feeds from Certanity's 24+ domain simulators. Each one exercises the same autonomy stack that ships to hardware."
+          number={3}
+          title="PROVE IT BEFORE YOU DEPLOY IT"
+          lede="Certanity's 24+ domain simulators test the same autonomy stack that runs on your hardware. Explore navigation, swarm coordination, and industrial inspection before moving into the field."
         />
 
         <Reveal className={styles.engine}>
@@ -1017,7 +1080,9 @@ export default function HomePage() {
 
       <main className={styles.page}>
         <Hero />
+        <TheProblem />
         <ProductGrid />
+        <WhySpaceborn />
         <HardwareLab />
         <RealityEngine />
         <Closing onResume={() => setIsResumeModalOpen(true)} />

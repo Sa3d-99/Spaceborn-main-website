@@ -74,3 +74,10 @@ Here is a quick overview of the directory layout:
 ## 📄 License
 
 This project is proprietary and confidential. All rights reserved.
+
+## Project knowledge
+
+Authored project notes live in [docs/knowledge-base](docs/knowledge-base/README.md).
+The local Graphify graph is `graphify-out/graph.json`; the Obsidian vault is
+`graphify-out/obsidian/`. Generated knowledge exports and extraction caches stay
+local. See the notes for the update workflow and homepage decisions.
