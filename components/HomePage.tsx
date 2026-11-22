@@ -572,10 +572,14 @@ function WhySpaceborn() {
         />
         <div className={styles.advantages}>
           {ADVANTAGES.map(({ title, icon: Icon, desc }) => (
-            <Reveal key={title} className={`du-card du-card-body ${styles.advantage}`}>
-              <Icon size={28} strokeWidth={1.25} aria-hidden="true" />
-              <h3 className="du-card-title">{title}</h3>
-              <p>{desc}</p>
+            <Reveal key={title} className={`du-card du-card-border ${styles.advantage}`}>
+              <div className={`du-card-body ${styles.advantageBody}`}>
+                <span className={styles.advantageIcon} aria-hidden="true">
+                  <Icon size={24} strokeWidth={1.5} />
+                </span>
+                <h3 className="du-card-title">{title}</h3>
+                <p>{desc}</p>
+              </div>
             </Reveal>
           ))}
         </div>

@@ -282,20 +282,28 @@
 .advantages {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 36px;
+  gap: clamp(12px, 1.5vw, 24px);
 }
 
 .advantage {
-  border-radius: 0;
-  gap: 12px;
-  padding: 28px 0 32px;
-  border-top: 1px solid var(--hairline-strong);
+  background: var(--color-base-100);
 }
 
-.advantage > svg {
-  display: block;
-  color: #b8b8c0;
-  margin-bottom: 10px;
+.advantageBody {
+  --du-card-p: clamp(20px, 2vw, 28px);
+  gap: 12px;
+}
+
+.advantageIcon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 4px;
+  border: 1px solid var(--color-base-200);
+  border-radius: var(--radius-field);
+  background: var(--color-neutral);
+  color: var(--color-base-content);
 }
 
 .advantage p {
@@ -982,6 +990,10 @@
 }
 
 @media (max-width: 960px) {
+  .advantages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .lab {
     grid-template-columns: 1fr;
   }
@@ -1037,11 +1049,6 @@
 
   .platformSummary {
     padding: 24px 20px;
-  }
-
-  .advantages {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 24px;
   }
 
   .advantage h3 {
