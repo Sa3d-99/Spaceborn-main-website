@@ -1,6 +1,6 @@
 # Architecture
 
-[[README]] · [[Homepage]]
+[[README]] · [[Homepage]] · [[Redesign-trial-1]]
 
 ## Purpose and entry points
 
@@ -11,8 +11,7 @@ products. It uses Next.js App Router, React, TypeScript, and vanilla CSS.
 - `app/layout.tsx` owns shared metadata, global styles, and `PageTransition`.
 - `components/HomePage.module.css` scopes the homepage design.
 - `app/home-daisyui.css` builds prefixed daisyUI components via Tailwind and
-  `postcss.config.mjs`. The `spaceborn` theme applies to the homepage and its
-  resume dialog. Tailwind Preflight is omitted to preserve other route styles.
+  `postcss.config.mjs`. The `spaceborn` theme applies to the homepage. Tailwind Preflight is omitted to preserve other route styles.
 - `components/Navbar.tsx`, `Footer.tsx`, and `ResumeModal.tsx` provide shared UI.
 - Other route trees cover company, systems, platforms, industries, simulation,
   DERYK, launches, and certificate verification.
@@ -21,10 +20,11 @@ products. It uses Next.js App Router, React, TypeScript, and vanilla CSS.
 
 ## Homepage dependencies
 
-Framer Motion handles animated transitions, Lucide supplies line icons, and
-IntersectionObserver controls reveal and video behavior. Product media lives at
-existing Cloudinary URLs; fonts and partner logos live under `public/`.
-`LazyVideo` mounts simulation sources when the viewport approaches.
+On `redesign/trial-1`, CSS controls entrance and motion preferences. The
+homepage loads Font Awesome from `all.min.css` for navigation and UI icons.
+The homepage uses checked-in Spaceborn media and existing Cloudinary URLs.
+Product card video loads on hover or keyboard focus in view. Simulation video
+uses native playback controls.
 
 ## Setup and verification
 

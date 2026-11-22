@@ -1,7 +1,8 @@
 # Spaceborn project knowledge
 
 - [[Architecture]] — routes, homepage components, assets, and run commands.
-- [[Homepage]] — approved scope, messaging, references, and verification.
+- [[Homepage]] — homepage messaging, references, and verification.
+- [[Redesign-trial-1]] — the separate redesign branch and its visual decisions.
 
 ## Local knowledge workflow
 
