@@ -10,6 +10,7 @@
     "drive:auth": "node scripts/google-drive-oauth.cjs"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "@types/three": "^0.186.0",
     "cloudinary": "^2.10.0",
     "dotenv": "^17.4.2",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, type ReactNode } from 'react';
 import Link from 'next/link';
 import MobileMenu from './MobileMenu';
 import UpcomingLaunches from './UpcomingLaunches';
@@ -76,7 +76,7 @@ export const DROPDOWN_NAV: Record<DropdownKey, { label: string; items: NavItem[]
 
 const CLOSE_DELAY_MS = 150;
 
-export default function Navbar() {
+export default function Navbar({ dropdownArrow = '→' }: { dropdownArrow?: ReactNode }) {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [hidden, setHidden] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -222,7 +222,7 @@ export default function Navbar() {
                               onClick={() => setOpenDropdown(null)}
                             >
                               <span className="nav-item-label">{item.label}</span>
-                              <span className="nav-item-arrow" aria-hidden="true">→</span>
+                              <span className="nav-item-arrow" aria-hidden="true">{dropdownArrow}</span>
                             </Link>
                           ) : (
                             <a
@@ -231,7 +231,7 @@ export default function Navbar() {
                               onClick={() => setOpenDropdown(null)}
                             >
                               <span className="nav-item-label">{item.label}</span>
-                              <span className="nav-item-arrow" aria-hidden="true">→</span>
+                              <span className="nav-item-arrow" aria-hidden="true">{dropdownArrow}</span>
                             </a>
                           )}
                         </li>

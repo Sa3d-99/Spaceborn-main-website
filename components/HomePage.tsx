@@ -353,12 +353,8 @@ function SectionHead({ title, lede }: { title: string; lede: string }) {
   );
 }
 
-function ArrowIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M4 12L12 4M12 4H5.5M12 4V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
-  );
+function ArrowIcon({ className }: { className: string }) {
+  return <i className={`fa-solid fa-circle-arrow-right ${className}`} aria-hidden="true" />;
 }
 
 const WAVE_GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>[]_';
@@ -530,13 +526,17 @@ function TheProblem() {
           title="AUTONOMY IS FRAGMENTED."
           lede="A drone, a rover, and an industrial robot do different jobs, yet their teams face the same integration work. They have to connect sensors and controllers, adapt software to the machine, and set up tests to see how it behaves. When these pieces live in separate tools, each new machine can mean rebuilding much of the same stack."
         />
-        <Reveal className={styles.platformBridge}>
+        <Reveal className={styles.platformDiagram}>
           <ul className={styles.platformLayers}>
             {PLATFORM_LAYERS.map(({ name, icon: Icon, desc }) => (
-              <li key={name} className="du-card du-card-border">
-                <Icon size={32} strokeWidth={1.25} aria-hidden="true" />
-                <span>{name}</span>
-                <p>{desc}</p>
+              <li key={name} className={`du-card du-card-side du-card-border ${styles.platformLayer}`}>
+                <span className={styles.platformIcon} aria-hidden="true">
+                  <Icon size={24} strokeWidth={1.5} />
+                </span>
+                <div className={`du-card-body ${styles.platformLayerBody}`}>
+                  <h3 className={`du-card-title ${styles.platformLayerTitle}`}>{name}</h3>
+                  <p>{desc}</p>
+                </div>
               </li>
             ))}
           </ul>
@@ -780,7 +780,7 @@ function HardwareLab() {
         />
 
         <Reveal>
-        <div className={`du-tabs du-tabs-box ${styles.tabs}`} role="tablist" aria-label="Hardware" onKeyDown={onKeyDown}>
+        <div className={`du-tabs du-tabs-box ${styles.tabs} ${styles.hardwareTabs}`} role="tablist" aria-label="Hardware" onKeyDown={onKeyDown}>
           {BOARDS.map((b, i) => (
             <button
               key={b.id}
@@ -1081,7 +1081,7 @@ export default function HomePage() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <Navbar />
+      <Navbar dropdownArrow={<i className="fa-solid fa-arrow-right" />} />
 
       <main className={styles.page} data-theme="spaceborn">
         <Hero />

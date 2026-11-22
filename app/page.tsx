@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomePage from '../components/HomePage';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import './home-daisyui.css';
 
 export const metadata: Metadata = {
