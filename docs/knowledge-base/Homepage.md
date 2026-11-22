@@ -30,6 +30,9 @@ and uses a `du-` prefix and the local Spaceborn theme. CSS Modules keep the medi
 layout and overlays. React still controls the hardware and scenario selections,
 and the resume form uses a native dialog with daisyUI styling.
 
+The hero video spans the viewport width. Its text keeps its own inset for
+readability.
+
 Homepage copy explains the job of each platform layer and gives concrete
 examples of the six benefits. Section headings and intro text are centered
 above the full-width content. The Contact engineering link sets the daisyUI
