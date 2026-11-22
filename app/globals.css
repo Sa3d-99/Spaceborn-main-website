@@ -256,6 +256,10 @@ a {
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
+.nav-external-arrow .fa-arrow-right {
+  transform: rotate(-45deg);
+}
+
 .nav-standalone-link:hover .nav-external-arrow {
   opacity: 1;
   transform: translate(1px, -1px);
