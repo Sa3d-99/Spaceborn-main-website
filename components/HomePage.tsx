@@ -344,13 +344,10 @@ function Reveal({ children, className, delay = 0 }: { children: ReactNode; class
   );
 }
 
-function SectionHead({ number, title, lede }: { number?: number; title: string; lede: string }) {
+function SectionHead({ title, lede }: { title: string; lede: string }) {
   return (
     <Reveal className={styles.sectionHead}>
-      <div className={styles.sectionTitleBlock}>
-        {number !== undefined && <span className={styles.sectionNumber}>{number}</span>}
-        <h2 className={styles.sectionTitle}>{title}</h2>
-      </div>
+      <h2 className={styles.sectionTitle}>{title}</h2>
       <p className={styles.sectionLede}>{lede}</p>
     </Reveal>
   );
@@ -746,7 +743,6 @@ function ProductGrid() {
     <section className={styles.section} id="platforms">
       <div className={styles.container}>
         <SectionHead
-          number={1}
           title="ONE STACK FOR EVERY PHYSICAL MACHINE"
           lede="Each product has a role in getting the machine into the field. ANSA runs the control software, DERYK translates operator intent into machine actions, and Certanity lets engineers test those behaviors in simulation. Flight controllers, motor controllers, and onboard compute bring the workflow onto physical hardware."
         />
@@ -779,7 +775,6 @@ function HardwareLab() {
     <section className={styles.section} id="systems">
       <div className={styles.container}>
         <SectionHead
-          number={2}
           title="FLIGHT CONTROLLERS"
           lede="Flight controllers run the control software, and electronic speed controllers drive the motors. Compare the ELARA boards that run ANSA and the ARIA 50A speed controller that feeds live current readings back to the flight controller. Open the specifications to see what fits your build."
         />
@@ -882,7 +877,6 @@ function RealityEngine() {
     <section ref={sectionRef} className={styles.section} id="simulation">
       <div className={styles.container}>
         <SectionHead
-          number={3}
           title="PROVE IT BEFORE YOU DEPLOY IT"
           lede="Certanity offers 24+ simulation domains for testing the autonomy stack that runs on your hardware. The examples below show how teams can test navigation when GPS is unavailable, observe coordination across multiple machines, and verify an inspection workflow before moving it onto the factory floor."
         />

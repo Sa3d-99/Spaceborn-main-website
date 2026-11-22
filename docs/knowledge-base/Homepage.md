@@ -14,8 +14,7 @@ video tiles, and Next.js implementation. They authorized pushing to
   teams repeat infrastructure engineering across different machines.
 - Explain Spaceborn's six benefits: faster development, accuracy, an integrated
   platform, hardware focus, AI insights, and growth from research to deployment.
-- Remove section and product eyebrow labels. Show the existing three product
-  sections with the plain numbers `1`, `2`, and `3`, at the same size as their headings.
+- Remove eyebrow labels and section numbers from the homepage headings.
 - Show product descriptions and explanatory paragraphs on both desktop and mobile.
 - Keep media URLs, tile order and sizing, product links, hardware specifications,
   hardware tabs, simulation scenes, navigation, footer, and resume flow intact.

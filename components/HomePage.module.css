@@ -930,33 +930,18 @@
   max-width: 66ch;
 }
 
-.sectionTitleBlock {
-  display: flex;
-  align-items: baseline;
-  gap: 18px;
+.sectionTitle {
+  margin: 0;
+  max-width: 32ch;
   font-family: var(--font-spacex, 'D-DIN', 'DIN Alternate', var(--sans));
   font-size: clamp(28px, 3.2vw, 44px);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: 0.01em;
-}
-
-.sectionTitle {
-  margin: 0;
-  max-width: 32ch;
-  font: inherit;
   text-transform: uppercase;
   text-wrap: balance;
   color: #f4f4f5;
 }
-
-
-.sectionNumber {
-  flex-shrink: 0;
-  color: var(--text-secondary);
-}
-
-
 
 
 /* ───────────── Closing ───────────── */
@@ -1044,8 +1029,7 @@
     margin-bottom: 20px;
   }
 
-  .sectionTitleBlock {
-    gap: 12px;
+  .sectionTitle {
     font-size: clamp(20px, 5.5vw, 28px);
     line-height: 1.08;
   }
