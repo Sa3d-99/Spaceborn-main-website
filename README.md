@@ -35,8 +35,7 @@ server and run `npm run build` followed by `npm run start`.
 Build and run the production server, then open [localhost:3000](http://localhost:3000).
 
 ```sh
-docker build -t spaceborn .
-docker run --rm -p 3000:3000 spaceborn
+docker compose up --build
 ```
 
 The image builds the Next.js standalone server and runs it as the non-root
@@ -47,6 +46,21 @@ For certificates or resume uploads, provide the existing server credentials
 with `docker run --env-file path/to/runtime.env …`. See the [backend setup](backend/README.md).
 If you use a custom releases feed, pass `--build-arg NEXT_PUBLIC_LAUNCHES_JSON_URL=…`
 to `docker build` so Next.js can include the URL in the browser bundle.
+
+### CI and image delivery
+
+GitHub Actions runs the TypeScript check, production dependency audit, Docker
+build, and container smoke test on pushes and pull requests targeting `main`
+or `redesign/trial-1`. Successful pushes publish the tested image to GitHub
+Container Registry using `sha-<commit>` as the tag. Pull requests and manual
+runs verify the image without publishing.
+
+Use the image reference in the workflow's **Publish to GitHub Container
+Registry** job summary to run a specific verified build. GitHub package
+access applies to registry pulls. For a custom releases feed, set the
+repository Actions variable `NEXT_PUBLIC_LAUNCHES_JSON_URL`. The workflow
+passes it to the Docker build as a public value. Keep server credentials
+in the environment where you run the image.
 
 ### Development Scripts
 

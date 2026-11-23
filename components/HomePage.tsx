@@ -573,7 +573,7 @@ export default function HomePage({ fontClassName }: { fontClassName: string }) {
         <Closing />
       </main>
 
-      <Footer />
+      <Footer isHome />
     </div>
   );
 }

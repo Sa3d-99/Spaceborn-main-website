@@ -30,6 +30,32 @@ div:global(.page-transition-container.page-is-transitioning):has(> .page) {
   border-top: 0 !important;
 }
 
+.page :global(.footer-social-group) { gap: 10px; }
+.page :global(.footer-social-group .du-btn) {
+  --du-size: 44px;
+  font-family: inherit;
+  font-size: .875rem;
+  letter-spacing: 0;
+}
+.page :global(.footer-social-group .linkedin-link) { font-size: 1.35rem; }
+
+.page :global(.footer-nav) { gap: clamp(8px, 2vw, 32px); }
+.page :global(.footer-nav a),
+.page :global(.footer-copyright) {
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.page :global(.footer-nav a) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: .875rem;
+}
+.page :global(.footer-copyright) { font-size: .8125rem; }
+
+.page :global(.footer-fixed) > * { order: initial; }
+
 .container {
   width: 100%;
   padding-inline: var(--gutter);

@@ -42,12 +42,18 @@ npm run build
 npm run start
 ```
 
-`.github/workflows/ci.yml` runs dependency installation, typechecking, and a
-production build on pushes and pull requests to `main`.
+`.github/workflows/ci.yml` typechecks, audits production dependencies, builds
+the standalone image, and tests the running container on pushes and pull
+requests targeting `main` or `redesign/trial-1`. The smoke test checks the home
+and about pages, video byte ranges, and the container user. A separate
+package-write job publishes the same tested image to GitHub Container Registry
+by commit SHA on successful pushes. GitHub Actions uses its built-in token for
+publication. The repository's optional public releases feed variable is
+passed at build time.
 
 The root `Dockerfile` sets `NEXT_STANDALONE=1` for the build. The runtime stage
 copies Next's traced server, static assets, and `public/` under a non-root user.
-See the root README for build and run commands.
+Run the local container with `docker compose up --build` from the repository root.
 
 Application configuration, credentials, and upload content must remain outside
 knowledge extraction. No secrets are needed to render the homepage.

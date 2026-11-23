@@ -23,7 +23,8 @@ into it. Trial 1 covers the homepage.
   board descriptions and specifications. Responsive tabs select the hardware.
 - **How it works:** explain documented AI, software, simulation, and hardware
   roles using the supplied platform relationship and existing technical pages.
-- **Contact:** one centered action to contact engineering.
+- **Contact:** one centered action to contact engineering. The footer pairs
+  Geist text with a daisyUI CEO email button and Font Awesome glyphs.
 
 Apple's homepage and MacBook Pro page supply the reference for scale and product
 emphasis.
