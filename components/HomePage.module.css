@@ -245,7 +245,7 @@ div:global(.page-transition-container.page-is-transitioning):has(> .page) {
   transition: transform .45s var(--ease-out);
 }
 
-.tileImage, .tileVideo {
+.tileImage {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -259,8 +259,6 @@ div:global(.page-transition-container.page-is-transitioning):has(> .page) {
   object-fit: contain;
 }
 
-.tileVideo { opacity: 0; transition: opacity .24s var(--ease-out); }
-.tileVideoOn { opacity: 1; }
 .tileText { flex: none; --du-card-p: clamp(18px, 2vw, 30px); padding-right: 54px; }
 .tileText p { max-width: 45ch; color: #d4d4d8; }
 
@@ -472,6 +470,7 @@ div:global(.page-transition-container.page-is-transitioning):has(> .page) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html:has(.page) { scroll-behavior: auto; }
   .page *, .page *::before, .page *::after { animation: none; transition: none; }
   .tile:hover, .tile:hover .tileMedia, .ctaButton:hover i, .labLink:hover i { transform: none; }
 }

@@ -16,31 +16,38 @@ products. It uses Next.js App Router, React, TypeScript, and vanilla CSS.
 - Other route trees cover company, systems, platforms, industries, simulation,
   DERYK, launches, and certificate verification.
 - `app/api/` contains certificate and resume endpoints. Their implementations
-  were outside the homepage task.
+  preserve their existing routes and data. Resume uploads use the Drive-only
+  `@googleapis/drive` client shared with the local OAuth helper.
 
 ## Homepage dependencies
 
 On `redesign/trial-1`, CSS controls entrance and motion preferences. The
 homepage loads Font Awesome from `all.min.css` for navigation and UI icons.
 The homepage uses checked-in Spaceborn media and existing Cloudinary URLs.
-Product card video loads on hover or keyboard focus in view. Simulation video
-uses native playback controls.
+The hero, product previews, and selected simulation use `LoopingVideo`.
+It plays muted loops in view, pauses off-screen, and respects reduced motion.
+Homepage anchors use native smooth scrolling, and the header stays in place.
 
 ## Setup and verification
 
-Use Node.js 20.9 or newer for the pinned Next.js release. CI
-uses Node 20; the November 2026 homepage checks ran on Node 22.
+Node.js 26.13.1 LTS is pinned in `.nvmrc` and the Docker base image. CI reads
+`.nvmrc`. The app uses Next.js 16.4, React 19.3, and TypeScript 7 with an
+ES2025 compiler target. Next runs the native TypeScript CLI during builds.
 
 ```sh
 npm ci
 npm run dev
-npx tsc --noEmit
+npm run typecheck
 npm run build
 npm run start
 ```
 
 `.github/workflows/ci.yml` runs dependency installation, typechecking, and a
 production build on pushes and pull requests to `main`.
+
+The root `Dockerfile` sets `NEXT_STANDALONE=1` for the build. The runtime stage
+copies Next's traced server, static assets, and `public/` under a non-root user.
+See the root README for build and run commands.
 
 Application configuration, credentials, and upload content must remain outside
 knowledge extraction. No secrets are needed to render the homepage.

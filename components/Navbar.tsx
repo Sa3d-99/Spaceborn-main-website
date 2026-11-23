@@ -76,7 +76,7 @@ export const DROPDOWN_NAV: Record<DropdownKey, { label: string; items: NavItem[]
 
 const CLOSE_DELAY_MS = 150;
 
-export default function Navbar({ linkArrow }: { linkArrow?: ReactNode }) {
+export default function Navbar({ linkArrow, hideOnScroll = true }: { linkArrow?: ReactNode; hideOnScroll?: boolean }) {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [hidden, setHidden] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -84,6 +84,8 @@ export default function Navbar({ linkArrow }: { linkArrow?: ReactNode }) {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
+    if (!hideOnScroll) return;
+
     const handleScroll = () => {
       const currentY = window.scrollY;
       if (openDropdown) {
@@ -100,7 +102,7 @@ export default function Navbar({ linkArrow }: { linkArrow?: ReactNode }) {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [openDropdown]);
+  }, [hideOnScroll, openDropdown]);
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {

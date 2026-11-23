@@ -1,16 +1,11 @@
 'use client';
-import { LazyVideo } from "./LazyVideo";
-
-import { useState, useEffect, useRef, type KeyboardEvent, type RefObject } from 'react';
+import { useState, useRef, type KeyboardEvent } from 'react';
 import Link from 'next/link';
-import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
+import LoopingVideo from './LoopingVideo';
 import Footer from './Footer';
 import Navbar from './Navbar';
 import Icon from './Icon';
 import styles from './HomePage.module.css';
-
-const SPRING = { type: 'spring', stiffness: 100, damping: 20 } as const;
-const PRESS = { scale: 0.97 };
 
 const CLD = 'https://res.cloudinary.com/kpa1wv3h';
 const cldVideo = (path: string, width: number) =>
@@ -194,15 +189,17 @@ const BOARDS: Board[] = [
 
 type Scenario = {
   id: string;
+  tab: string;
   title: string;
   desc: string;
   readouts: [string, string][];
-  video: { src: string; poster: string; fit?: 'cover' | 'contain' };
+  video: { src: string; poster: string };
 };
 
 const SCENARIOS: Scenario[] = [
   {
     id: 'tunnel-drone',
+    tab: 'GPS-denied',
     title: 'GPS-denied tunnel navigation',
     desc: 'When satellites disappear, autonomy takes over. Optical flow and LiDAR point clouds hold trajectory through unmapped subterranean corridors.',
     readouts: [['GNSS', 'DENIED'], ['HOLD', 'OPTICAL FLOW'], ['TRAJECTORY', 'LOCKED']],
@@ -213,6 +210,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: 'drone-swarm',
+    tab: 'Swarm',
     title: '128-unit swarm coordination',
     desc: 'Distributed consensus and decentralized collision avoidance. Autonomous agents negotiate airspace and execute synchronized group missions.',
     readouts: [['AGENTS', '128'], ['CONSENSUS', 'SYNCED'], ['LINK', 'MESH 5.8GHZ']],
@@ -223,6 +221,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: 'factory',
+    tab: 'Industrial inspection',
     title: 'Industrial inspection cell',
     desc: 'Four robot stations, a conveyor, and an inspection line in a simulated factory, proven before any arm moves on the floor.',
     readouts: [['STATIONS', '4'], ['LINE', 'INSPECTION'], ['DOMAIN', 'INDUSTRIAL']],
@@ -242,35 +241,6 @@ const PARTNERS: { name: string; logo?: string; width?: number; height?: number; 
   { name: 'NVIDIA', logo: '/images/partners/nvidia.svg', width: 656, height: 120, em: 1.3 },
 ];
 
-function useInView(ref: RefObject<Element | null>, threshold = 0.15) {
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref, threshold]);
-  return inView;
-}
-
-function usePlayWhen(videoRef: RefObject<HTMLVideoElement | null>, shouldPlay: boolean) {
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (!shouldPlay) {
-      video.pause();
-      return;
-    }
-    const play = () => {
-      video.play().catch(() => {});
-    };
-    play();
-    video.addEventListener('loadeddata', play);
-    return () => video.removeEventListener('loadeddata', play);
-  }, [videoRef, shouldPlay]);
-}
-
 function SectionHead({ title, lede }: { title: string; lede: string }) {
   return (
     <header className={styles.sectionHead}>
@@ -281,32 +251,12 @@ function SectionHead({ title, lede }: { title: string; lede: string }) {
 }
 
 function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const inView = useInView(sectionRef, 0.05);
-  const reduceMotion = useReducedMotion();
-  const [introFinished, setIntroFinished] = useState(false);
-  usePlayWhen(videoRef, inView && !reduceMotion && !introFinished);
-
   return (
-    <section ref={sectionRef} className={styles.hero} id="releases" aria-labelledby="home-title">
-      <video
-        ref={videoRef}
-        className={styles.heroVideo}
-        muted playsInline preload="metadata"
-        poster="/media/home/hero-sb1.webp"
-        aria-hidden="true"
-        onTimeUpdate={(event) => {
-          const video = event.currentTarget;
-          if (video.currentTime >= 4.5) {
-            video.pause();
-            setIntroFinished(true);
-          }
-        }}
-      >
+    <section className={styles.hero} id="releases" aria-labelledby="home-title">
+      <LoopingVideo className={styles.heroVideo} poster="/media/home/hero-sb1.webp" aria-hidden="true">
         <source src="/media/home/hero-sb1-720.mp4" type="video/mp4" media="(max-width: 768px)" />
         <source src="/media/home/hero-sb1.mp4" type="video/mp4" />
-      </video>
+      </LoopingVideo>
       <div className={styles.heroVignette} />
       <div className={`${styles.container} ${styles.heroContent}`}>
         <h1 className={styles.heroTitle} id="home-title">Build autonomous<br className={styles.heroBreak} /> machines.</h1>
@@ -351,34 +301,18 @@ function WhySpaceborn() {
 }
 
 function ProductTile({ tile }: { tile: Tile }) {
-  const tileRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [preview, setPreview] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const inView = useInView(tileRef, 0.05);
-  const reduceMotion = useReducedMotion();
-  usePlayWhen(videoRef, preview && inView && !reduceMotion);
-  const props = {
-    className: `du-card du-card-border ${styles.tile}`,
-    onPointerEnter: (event: React.PointerEvent) => { if (event.pointerType === 'mouse') setPreview(true); },
-    onPointerLeave: () => setPreview(false),
-    onFocus: () => setPreview(true),
-    onBlur: () => setPreview(false),
-  };
+  const className = `du-card du-card-border ${styles.tile}`;
+  const mediaClassName = tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage;
   const position = tile.position ? { objectPosition: tile.position } : undefined;
   const body = (
     <>
       <div className={styles.tileMedia}>
-        <img
-          className={tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage}
-          src={tile.image} alt={tile.alt} loading="lazy" decoding="async" style={position}
-        />
-        {tile.video && (
-          <LazyVideo ref={videoRef} className={`${styles.tileVideo} ${playing ? styles.tileVideoOn : ''}`}
-            style={position} muted loop playsInline preload="none" aria-hidden="true"
-            onPlaying={() => setPlaying(true)} onPause={() => setPlaying(false)}>
-            <source src={tile.video} type="video/mp4" />
-          </LazyVideo>
+        {tile.video ? (
+          <LoopingVideo className={mediaClassName} style={position} src={tile.video}
+            poster={tile.image} aria-hidden="true" />
+        ) : (
+          <img className={mediaClassName} src={tile.image} alt={tile.alt}
+            loading="lazy" decoding="async" style={position} />
         )}
       </div>
       <div className={`du-card-body ${styles.tileText}`}>
@@ -390,11 +324,11 @@ function ProductTile({ tile }: { tile: Tile }) {
   );
 
   return (
-    <div ref={tileRef} className={`${styles.tileCell} ${styles[tile.size]}`} data-tile={tile.id}>
+    <div className={`${styles.tileCell} ${styles[tile.size]}`} data-tile={tile.id}>
       {tile.href.startsWith('http') ? (
-        <a href={tile.href} target="_blank" rel="noopener noreferrer" {...props}>{body}</a>
+        <a href={tile.href} target="_blank" rel="noopener noreferrer" className={className}>{body}</a>
       ) : (
-        <Link href={tile.href} {...props}>{body}</Link>
+        <Link href={tile.href} className={className}>{body}</Link>
       )}
     </div>
   );
@@ -446,7 +380,6 @@ function HardwareLab() {
           lede="Flight controllers run the control software, and electronic speed controllers drive the motors. Compare the ELARA boards that run ANSA and the ARIA 50A speed controller that feeds live current readings back to the flight controller. Open the specifications to see what fits your build."
         />
 
-        <div>
         <div className={`du-tabs du-tabs-box ${styles.tabs} ${styles.hardwareTabs}`} role="tablist" aria-label="Hardware" onKeyDown={(event) => selectTab(event, active, BOARDS.length, tabRefs.current, setActive)}>
           {BOARDS.map((b, i) => (
             <button
@@ -470,59 +403,43 @@ function HardwareLab() {
 
         <div className={`du-card du-card-border ${styles.lab}`} role="tabpanel" id="hw-panel" aria-labelledby={`hw-tab-${board.id}`}>
           <div className={styles.labMedia}>
-            <AnimatePresence initial={false}>
-              <motion.img
-                key={board.id}
-                className={styles.labImage}
-                src={board.image.src}
-                alt={board.image.alt}
-                width={board.image.width}
-                height={board.image.height}
-                decoding="async"
-                loading="lazy"
-                initial={{ opacity: 0, filter: 'blur(6px)' }}
-                animate={{ opacity: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-              />
-            </AnimatePresence>
+            <img
+              key={board.id}
+              className={styles.labImage}
+              src={board.image.src}
+              alt={board.image.alt}
+              width={board.image.width}
+              height={board.image.height}
+              decoding="async"
+              loading="lazy"
+            />
           </div>
 
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={board.id}
-              className={`du-card-body ${styles.labBody}`}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            >
-              <h3 className={`du-card-title ${styles.labTitle}`}>{board.name}</h3>
-              <p className={styles.labKind}>{board.kind}</p>
-              <p className={styles.labDesc}>{board.desc}</p>
-              <table className={`du-table ${styles.specTable}`}>
-                <thead>
-                  <tr>
-                    <th scope="col">Parameter</th>
-                    <th scope="col">Specification</th>
+          <div className={`du-card-body ${styles.labBody}`}>
+            <h3 className={`du-card-title ${styles.labTitle}`}>{board.name}</h3>
+            <p className={styles.labKind}>{board.kind}</p>
+            <p className={styles.labDesc}>{board.desc}</p>
+            <table className={`du-table ${styles.specTable}`}>
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Specification</th>
+                </tr>
+              </thead>
+              <tbody>
+                {board.specs.map(([param, spec]) => (
+                  <tr key={param}>
+                    <td>{param}</td>
+                    <td>{spec}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {board.specs.map(([param, spec]) => (
-                    <tr key={param}>
-                      <td>{param}</td>
-                      <td>{spec}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <Link href={board.href} className={`du-btn du-btn-link ${styles.labLink}`}>
-                Full documentation
-                <Icon name="circle-arrow-right" />
-              </Link>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+                ))}
+              </tbody>
+            </table>
+            <Link href={board.href} className={`du-btn du-btn-link ${styles.labLink}`}>
+              Full documentation
+              <Icon name="circle-arrow-right" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
@@ -546,16 +463,14 @@ function RealityEngine() {
               className={`du-tab ${styles.tab} ${i === active ? 'du-tab-active' : ''}`}
               aria-selected={i === active} aria-controls="sim-panel" tabIndex={i === active ? 0 : -1}
               onClick={() => setActive(i)}>
-              {['GPS-denied', 'Swarm', 'Industrial inspection'][i]}
+              {scene.tab}
             </button>
           ))}
         </div>
         <div className={`du-card du-card-border ${styles.engine}`} role="tabpanel" id="sim-panel" aria-labelledby={`sim-tab-${scenario.id}`}>
           <div className={styles.viewport}>
-            <LazyVideo key={scenario.id} className={styles.viewportVideo} controls muted playsInline preload="none"
-              poster={scenario.video.poster} aria-label={scenario.title}>
-              <source src={scenario.video.src} type="video/mp4" />
-            </LazyVideo>
+            <LoopingVideo key={scenario.id} className={styles.viewportVideo} src={scenario.video.src}
+              poster={scenario.video.poster} aria-label={scenario.title} />
           </div>
           <div className={`du-card-body ${styles.scenarioCopy}`}>
             <h3>{scenario.title}</h3>
@@ -630,16 +545,14 @@ function Closing() {
             hardware, planning simulation tests, or preparing a prototype for field trials.
           </p>
         </div>
-        <motion.a
+        <a
           href="https://www.linkedin.com/in/adarsh-kumar-ab8111377?originalSubdomain=in"
           target="_blank"
           rel="noopener noreferrer"
           className={`du-btn du-btn-primary ${styles.ctaButton} ${styles.ctaPrimary}`}
-          whileTap={PRESS}
-          transition={SPRING}
         >
           Contact engineering <Icon name="arrow-right" />
-        </motion.a>
+        </a>
       </div>
     </section>
   );
@@ -647,23 +560,20 @@ function Closing() {
 
 export default function HomePage({ fontClassName }: { fontClassName: string }) {
   return (
-    <MotionConfig reducedMotion="user">
-      <div className={`${styles.page} ${fontClassName}`}>
-        <Navbar linkArrow={<Icon name="arrow-right" />} />
+    <div className={`${styles.page} ${fontClassName}`}>
+      <Navbar linkArrow={<Icon name="arrow-right" />} hideOnScroll={false} />
 
-        <main data-theme="spaceborn">
-          <Hero />
-          <WhySpaceborn />
-          <ProductGrid />
-          <RealityEngine />
-          <HardwareLab />
-          <TheProblem />
-          <Closing />
-        </main>
+      <main data-theme="spaceborn">
+        <Hero />
+        <WhySpaceborn />
+        <ProductGrid />
+        <RealityEngine />
+        <HardwareLab />
+        <TheProblem />
+        <Closing />
+      </main>
 
-        <Footer />
-      </div>
-
-    </MotionConfig>
+      <Footer />
+    </div>
   );
 }
