@@ -8,10 +8,11 @@ import Icon from './Icon';
 import styles from './HomePage.module.css';
 
 const CLD = 'https://res.cloudinary.com/kpa1wv3h';
-const cldVideo = (path: string, width: number) =>
-  `${CLD}/video/upload/f_auto,q_auto:good,w_${width},c_limit/${path}.mp4`;
-const cldPoster = (path: string, width: number) =>
-  `${CLD}/video/upload/so_1,f_auto,q_auto,w_${width},c_limit/${path}.jpg`;
+const ARIA_IMAGE = `${CLD}/image/upload/v1783382813/spaceborn_assets/ESC%2050A.png`;
+const cldVideo = (path: string) =>
+  `${CLD}/video/upload/f_auto/q_auto:best/${path}.mp4`;
+const cldPoster = (path: string) =>
+  `${CLD}/video/upload/so_1/f_auto/q_auto:best/${path}.jpg`;
 
 type Tile = {
   id: string;
@@ -33,8 +34,8 @@ const TILES: Tile[] = [
     desc: 'Flight control and onboard autonomy, powered by ANSA on ELARA hardware.',
     href: '/systems/flight-cont',
     size: 'wide',
-    image: cldPoster('v1785868057/VideoProject_hzk4kg', 1600),
-    video: cldVideo('v1785868057/VideoProject_hzk4kg', 1600),
+    image: cldPoster('v1785868057/VideoProject_hzk4kg'),
+    video: cldVideo('v1785868057/VideoProject_hzk4kg'),
     alt: 'ELARA flight controller mounted on a drone frame',
   },
   {
@@ -53,7 +54,7 @@ const TILES: Tile[] = [
     desc: 'Precise motor control with live current feedback to the flight controller.',
     href: '/systems/Esc-sys',
     size: 'square',
-    image: `${CLD}/image/upload/f_auto,q_auto,w_900,c_limit/v1783382813/spaceborn_assets/ESC%2050A.png`,
+    image: ARIA_IMAGE,
     alt: 'ARIA 50A electronic speed controller PCB',
     fit: 'contain',
   },
@@ -73,8 +74,8 @@ const TILES: Tile[] = [
     desc: 'Turns operator intent into executable machine action.',
     href: 'https://spaceborn-web.vercel.app/',
     size: 'wide',
-    image: cldPoster('v1785966524/womanAndDrone_xjbmqm', 1200),
-    video: cldVideo('v1785966524/womanAndDrone_xjbmqm', 1200),
+    image: cldPoster('v1785966524/womanAndDrone_xjbmqm'),
+    video: cldVideo('v1785966524/womanAndDrone_xjbmqm'),
     alt: 'Operator collaborating with autonomous drone platform in the field',
   },
   {
@@ -83,8 +84,8 @@ const TILES: Tile[] = [
     desc: 'Test and validate autonomous systems in 24+ simulation domains before deployment.',
     href: 'https://certanity.com/',
     size: 'square',
-    image: cldPoster('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
-    video: cldVideo('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
+    image: cldPoster('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj'),
+    video: cldVideo('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj'),
     alt: 'Quadcopter holding position inside a concrete tunnel',
     position: '68% 50%',
   },
@@ -179,10 +180,10 @@ const BOARDS: Board[] = [
     ],
     href: '/systems/Esc-sys',
     image: {
-      src: `${CLD}/image/upload/f_auto,q_auto,w_900,c_limit/v1783382813/spaceborn_assets/ESC%2050A.png`,
+      src: ARIA_IMAGE,
       alt: 'ARIA 50A electronic speed controller PCB',
-      width: 900,
-      height: 900,
+      width: 2000,
+      height: 2000,
     },
   },
 ];
@@ -204,8 +205,8 @@ const SCENARIOS: Scenario[] = [
     desc: 'When satellites disappear, autonomy takes over. Optical flow and LiDAR point clouds hold trajectory through unmapped subterranean corridors.',
     readouts: [['GNSS', 'DENIED'], ['HOLD', 'OPTICAL FLOW'], ['TRAJECTORY', 'LOCKED']],
     video: {
-      src: cldVideo('v1785966759/tunnelDrone_nhqulg', 1600),
-      poster: cldPoster('v1785966759/tunnelDrone_nhqulg', 1600),
+      src: cldVideo('v1785966759/tunnelDrone_nhqulg'),
+      poster: cldPoster('v1785966759/tunnelDrone_nhqulg'),
     },
   },
   {
@@ -215,8 +216,8 @@ const SCENARIOS: Scenario[] = [
     desc: 'Distributed consensus and decentralized collision avoidance. Autonomous agents negotiate airspace and execute synchronized group missions.',
     readouts: [['AGENTS', '128'], ['CONSENSUS', 'SYNCED'], ['LINK', 'MESH 5.8GHZ']],
     video: {
-      src: cldVideo('v1786023546/swarmFleet_x4tlds', 1600),
-      poster: cldPoster('v1786023546/swarmFleet_x4tlds', 1600),
+      src: cldVideo('v1786023546/swarmFleet_x4tlds'),
+      poster: cldPoster('v1786023546/swarmFleet_x4tlds'),
     },
   },
   {
@@ -253,10 +254,8 @@ function SectionHead({ title, lede }: { title: string; lede: string }) {
 function Hero() {
   return (
     <section className={styles.hero} id="releases" aria-labelledby="home-title">
-      <LoopingVideo className={styles.heroVideo} poster="/media/home/hero-sb1.webp" aria-hidden="true">
-        <source src="/media/home/hero-sb1-720.mp4" type="video/mp4" media="(max-width: 768px)" />
-        <source src="/media/home/hero-sb1.mp4" type="video/mp4" />
-      </LoopingVideo>
+      <LoopingVideo className={styles.heroVideo} src="/media/home/hero-sb1.mp4"
+        poster="/media/home/hero-sb1.webp" aria-hidden="true" />
       <div className={styles.heroVignette} />
       <div className={`${styles.container} ${styles.heroContent}`}>
         <h1 className={styles.heroTitle} id="home-title">Build autonomous<br className={styles.heroBreak} /> machines.</h1>
