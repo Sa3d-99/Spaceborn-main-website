@@ -7,7 +7,9 @@ simulation, and flight hardware. The page's first action is **Explore the stack*
 The black and gray palette, D-DIN/Geist typography, logo, product names, and
 technical content come from the existing site. A continuous charcoal-to-black
 background runs through the homepage and its footer. The hero film fades
-into it. Trial 1 covers the homepage.
+into it. Trial 1 covers the homepage. D-DIN headings use the font’s natural
+letter spacing and roomier line heights for wrapped titles. The Releases
+trigger shares the main navigation button style.
 
 - **Hero:** the checked-in ELARA board footage, with a poster, reduced-motion
   behavior, and one main action slightly above center on the full-screen film.

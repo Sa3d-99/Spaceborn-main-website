@@ -338,7 +338,7 @@ function ProductGrid() {
     <section className={styles.section} id="platforms">
       <div className={styles.container}>
         <SectionHead
-          title="One stack, from software to silicon"
+          title="One stack from software to silicon"
           lede="Each product has a role in getting the machine into the field. ANSA runs the control software, DERYK translates operator intent into machine actions, and Certanity lets engineers test those behaviors in simulation. Flight controllers, motor controllers, and onboard compute bring the workflow onto physical hardware."
         />
         <div className={styles.tiles}>
@@ -375,7 +375,7 @@ function HardwareLab() {
     <section className={styles.section} id="systems">
       <div className={styles.container}>
         <SectionHead
-          title="Flight control, up close"
+          title="Flight control up close"
           lede="Flight controllers run the control software, and electronic speed controllers drive the motors. Compare the ELARA boards that run ANSA and the ARIA 50A speed controller that feeds live current readings back to the flight controller. Open the specifications to see what fits your build."
         />
 

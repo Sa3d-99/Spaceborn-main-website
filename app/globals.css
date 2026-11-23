@@ -2620,37 +2620,6 @@ a {
   justify-self: end;
 }
 
-.launches-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 4px;
-  color: #ffffff;
-  padding: 8px 14px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
-  white-space: nowrap;
-}
-
-.launches-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-1px);
-}
-
-.launches-btn:active {
-  transform: scale(0.98);
-}
-
-
-
 .chevron {
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   color: rgba(255, 255, 255, 0.6);
