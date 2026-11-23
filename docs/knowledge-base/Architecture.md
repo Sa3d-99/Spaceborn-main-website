@@ -21,11 +21,13 @@ products. It uses Next.js App Router, React, TypeScript, and vanilla CSS.
 
 ## Homepage dependencies
 
-On `redesign/trial-1`, CSS controls entrance and motion preferences. The
-homepage loads Font Awesome from `all.min.css` for navigation and UI icons.
+On `redesign/trial-1`, CSS controls entrance and motion preferences. The root
+layout loads Font Awesome from `all.min.css` for navigation and UI icons.
 The homepage uses checked-in Spaceborn media and existing Cloudinary URLs.
 The hero, product previews, and selected simulation use `LoopingVideo`.
-It plays muted loops in view, pauses off-screen, and respects reduced motion.
+It plays muted loops in view, pauses off-screen and on inactive tabs, and
+respects reduced motion. The active simulation keeps its media position across
+tab changes. Native video sources select a smaller rendition on compact layouts.
 Homepage anchors use native smooth scrolling, and the header stays in place.
 
 ## Setup and verification

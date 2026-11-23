@@ -1,12 +1,12 @@
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 
 /* Generate the homepage components without Preflight or unrelated utilities. */
-@source inline("du-{alert,alert-error,btn,btn-ghost,btn-link,btn-outline,btn-primary,btn-sm,btn-square,card,card-body,card-border,card-side,card-title,hero,hero-content,hero-overlay,input,modal,modal-box,tab,tab-active,table,tabs,tabs-box,textarea}");
+@source inline("du-{alert,alert-error,aura,aura-glow,btn,btn-ghost,btn-link,btn-outline,btn-primary,btn-sm,btn-square,card,card-body,card-border,card-side,card-title,hero,hero-content,hero-overlay,input,modal,modal-box,tab,tab-active,table,tabs,tabs-box,textarea}");
 
 @plugin "daisyui" {
   themes: false;
   prefix: "du-";
-  include: alert, button, card, hero, input, modal, tab, table, textarea;
+  include: alert, aura, button, card, hero, input, modal, tab, table, textarea;
   logs: false;
 }
 

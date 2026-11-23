@@ -4,15 +4,15 @@ import { useEffect, useRef, type ComponentPropsWithoutRef } from 'react';
 
 type LoopingVideoProps = Omit<
   ComponentPropsWithoutRef<'video'>,
-  'autoPlay' | 'controls' | 'loop' | 'muted' | 'playsInline' | 'preload'
->;
+  'autoPlay' | 'controls' | 'loop' | 'muted' | 'playsInline' | 'preload' | 'src'
+> & { src: string; active?: boolean; compactSrc?: string };
 
-export default function LoopingVideo(props: LoopingVideoProps) {
+export default function LoopingVideo({ active = true, compactSrc, src, ...props }: LoopingVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !active) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let visible = false;
@@ -39,7 +39,12 @@ export default function LoopingVideo(props: LoopingVideoProps) {
       reducedMotion.removeEventListener('change', syncPlayback);
       video.pause();
     };
-  }, []);
+  }, [active]);
 
-  return <video {...props} ref={videoRef} muted loop playsInline preload="none" />;
+  return (
+    <video {...props} ref={videoRef} src={compactSrc ? undefined : src} muted loop playsInline preload="none">
+      {compactSrc && <source src={compactSrc} media="(max-width: 820px)" />}
+      {compactSrc && <source src={src} />}
+    </video>
+  );
 }

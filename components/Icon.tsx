@@ -1,3 +1,4 @@
-export default function Icon({ name, className }: { name: string; className?: string }) {
-  return <i className={`fa-solid fa-${name}${className ? ` ${className}` : ''}`} aria-hidden="true" />;
+export default function Icon({ name, className, size }: { name: string; className?: string; size?: number }) {
+  return <i className={`fa-solid fa-${name}${className ? ` ${className}` : ''}`}
+    style={size ? { fontSize: size } : undefined} aria-hidden="true" />;
 }

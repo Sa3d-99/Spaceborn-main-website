@@ -1,5 +1,7 @@
 'use client';
 
+import Icon from './Icon';
+
 import { useState, useEffect, useRef, DragEvent, ChangeEvent } from 'react';
 
 type ResumeModalProps = {
@@ -165,10 +167,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
           aria-label="Close modal"
           type="button"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
+          <Icon name="xmark" size={16} />
         </button>
 
         <div className="modal-body">
@@ -258,24 +257,14 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isSubmitting}
                     >
-                      <svg className="file-dropzone-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="17 8 12 3 7 8" />
-                        <line x1="12" y1="3" x2="12" y2="15" />
-                      </svg>
+                      <Icon name="arrow-up-from-bracket" size={24} className="file-dropzone-icon" />
                       <span className="file-dropzone-text font-mono">DRAG & DROP YOUR FILE OR CLICK TO BROWSE</span>
                       <span className="file-dropzone-subtext font-mono">SUPPORTED TYPES: PDF, DOCX, DOC (MAX 10MB)</span>
                     </button>
                   ) : (
                     <div className="selected-file-container">
                       <div className="selected-file-info font-mono">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                          <polyline points="14 2 14 8 20 8" />
-                          <line x1="16" y1="13" x2="8" y2="13" />
-                          <line x1="16" y1="17" x2="8" y2="17" />
-                          <polyline points="10 9 9 9 8 9" />
-                        </svg>
+                        <Icon name="file-lines" size={16} />
                         <span>{file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)</span>
                       </div>
                       <button 
@@ -285,12 +274,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
                         disabled={isSubmitting}
                         aria-label="Remove uploaded resume"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                          <line x1="10" y1="11" x2="10" y2="17" />
-                          <line x1="14" y1="11" x2="14" y2="17" />
-                        </svg>
+                        <Icon name="trash-can" size={16} />
                       </button>
                     </div>
                   )}
@@ -309,10 +293,7 @@ export default function ResumeModal({ onClose }: ResumeModalProps) {
           ) : (
             <div className="success-state">
               <div className="success-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                  <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
+                <Icon name="circle-check" size={64} />
               </div>
               <h2 id="resume-modal-title" className="success-title font-ethno">Transmission Verified</h2>
               <p className="success-message font-mono">
