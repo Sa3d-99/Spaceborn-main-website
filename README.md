@@ -47,20 +47,16 @@ with `docker run --env-file path/to/runtime.env …`. See the [backend setup](ba
 If you use a custom releases feed, pass `--build-arg NEXT_PUBLIC_LAUNCHES_JSON_URL=…`
 to `docker build` so Next.js can include the URL in the browser bundle.
 
-### CI and image delivery
+### CI checks
 
-GitHub Actions runs the TypeScript check, production dependency audit, Docker
-build, and container smoke test on pushes and pull requests targeting `main`
-or `redesign/trial-1`. Successful pushes publish the tested image to GitHub
-Container Registry using `sha-<commit>` as the tag. Pull requests verify the image. The manual workflow can also publish from
-either delivery branch when **Publish the verified image to GHCR** is selected.
+GitHub Actions runs type checking, the production dependency audit, the Docker
+build, and container smoke tests on pushes and pull requests targeting `main`
+or `redesign/trial-1`. You can also start these checks manually on GitHub.
+The build and smoke tests run on the GitHub runner.
 
-Use the image reference in the workflow's **Publish to GitHub Container
-Registry** job summary to run a specific verified build. GitHub package
-access applies to registry pulls. For a custom releases feed, set the
-repository Actions variable `NEXT_PUBLIC_LAUNCHES_JSON_URL`. The workflow
-passes it to the Docker build as a public value. Keep server credentials
-in the environment where you run the image.
+For a custom releases feed during CI, set the repository Actions variable
+`NEXT_PUBLIC_LAUNCHES_JSON_URL`. The workflow uses it as a public build value.
+Keep server credentials in the environment where you run the site.
 
 ### Development Scripts
 

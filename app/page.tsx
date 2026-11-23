@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import HomePage from '../components/HomePage';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import './home-daisyui.css';
 
 const geist = Geist({ subsets: ['latin'], variable: '--home-font' });

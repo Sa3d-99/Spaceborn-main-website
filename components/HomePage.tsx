@@ -9,8 +9,8 @@ import styles from './HomePage.module.css';
 
 const CLD = 'https://res.cloudinary.com/kpa1wv3h';
 const ARIA_IMAGE = `${CLD}/image/upload/v1783382813/spaceborn_assets/ESC%2050A.png`;
-const cldVideo = (path: string) =>
-  `${CLD}/video/upload/f_auto/q_auto:best/${path}.mp4`;
+const cldVideo = (path: string, compact = false) =>
+  `${CLD}/video/upload/${compact ? 'c_limit,w_1440/' : ''}f_auto/q_auto:best/${path}.mp4`;
 const cldPoster = (path: string) =>
   `${CLD}/video/upload/so_1/f_auto/q_auto:best/${path}.jpg`;
 
@@ -23,6 +23,7 @@ type Tile = {
   image: string;
   alt: string;
   video?: string;
+  compactVideo?: string;
   fit?: 'cover' | 'contain';
   position?: string;
 };
@@ -76,6 +77,7 @@ const TILES: Tile[] = [
     size: 'wide',
     image: cldPoster('v1785966524/womanAndDrone_xjbmqm'),
     video: cldVideo('v1785966524/womanAndDrone_xjbmqm'),
+    compactVideo: cldVideo('v1785966524/womanAndDrone_xjbmqm', true),
     alt: 'Operator collaborating with autonomous drone platform in the field',
   },
   {
@@ -194,7 +196,7 @@ type Scenario = {
   title: string;
   desc: string;
   readouts: [string, string][];
-  video: { src: string; poster: string };
+  video: { src: string; poster: string; compactSrc?: string };
 };
 
 const SCENARIOS: Scenario[] = [
@@ -206,6 +208,7 @@ const SCENARIOS: Scenario[] = [
     readouts: [['GNSS', 'DENIED'], ['HOLD', 'OPTICAL FLOW'], ['TRAJECTORY', 'LOCKED']],
     video: {
       src: cldVideo('v1785966759/tunnelDrone_nhqulg'),
+      compactSrc: cldVideo('v1785966759/tunnelDrone_nhqulg', true),
       poster: cldPoster('v1785966759/tunnelDrone_nhqulg'),
     },
   },
@@ -217,6 +220,7 @@ const SCENARIOS: Scenario[] = [
     readouts: [['AGENTS', '128'], ['CONSENSUS', 'SYNCED'], ['LINK', 'MESH 5.8GHZ']],
     video: {
       src: cldVideo('v1786023546/swarmFleet_x4tlds'),
+      compactSrc: cldVideo('v1786023546/swarmFleet_x4tlds', true),
       poster: cldPoster('v1786023546/swarmFleet_x4tlds'),
     },
   },
@@ -260,9 +264,6 @@ function Hero() {
       <div className={`${styles.container} ${styles.heroContent}`}>
         <h1 className={styles.heroTitle} id="home-title">Build autonomous<br className={styles.heroBreak} /> machines.</h1>
         <p className={styles.heroSub}>Autonomy software, simulation, and flight hardware in one Spaceborn stack.</p>
-        <a href="#platforms" className={`du-btn du-btn-primary ${styles.ctaButton} ${styles.ctaPrimary}`}>
-          Explore the stack <Icon name="arrow-down" />
-        </a>
       </div>
     </section>
   );
@@ -300,15 +301,14 @@ function WhySpaceborn() {
 }
 
 function ProductTile({ tile }: { tile: Tile }) {
-  const className = `du-card du-card-border ${styles.tile}`;
   const mediaClassName = tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage;
   const position = tile.position ? { objectPosition: tile.position } : undefined;
   const body = (
-    <>
+    <div className={`du-card du-card-border ${styles.tile}`}>
       <div className={styles.tileMedia}>
         {tile.video ? (
           <LoopingVideo className={mediaClassName} style={position} src={tile.video}
-            poster={tile.image} aria-hidden="true" />
+            compactSrc={tile.compactVideo} poster={tile.image} aria-hidden="true" />
         ) : (
           <img className={mediaClassName} src={tile.image} alt={tile.alt}
             loading="lazy" decoding="async" style={position} />
@@ -319,15 +319,15 @@ function ProductTile({ tile }: { tile: Tile }) {
         <p>{tile.desc}</p>
       </div>
       <Icon name="circle-arrow-right" className={styles.tileArrow} />
-    </>
+    </div>
   );
 
   return (
     <div className={`${styles.tileCell} ${styles[tile.size]}`} data-tile={tile.id}>
       {tile.href.startsWith('http') ? (
-        <a href={tile.href} target="_blank" rel="noopener noreferrer" className={className}>{body}</a>
+        <a href={tile.href} target="_blank" rel="noopener noreferrer" className={styles.tileLink}>{body}</a>
       ) : (
-        <Link href={tile.href} className={className}>{body}</Link>
+        <Link href={tile.href} className={styles.tileLink}>{body}</Link>
       )}
     </div>
   );
@@ -351,25 +351,49 @@ function ProductGrid() {
   );
 }
 
-function selectTab(
-  event: KeyboardEvent<HTMLDivElement>, active: number, length: number,
-  tabs: (HTMLButtonElement | null)[], onSelect: (next: number) => void,
-) {
-  let next = active;
-  if (event.key === 'ArrowRight') next = (active + 1) % length;
-  else if (event.key === 'ArrowLeft') next = (active + length - 1) % length;
-  else if (event.key === 'Home') next = 0;
-  else if (event.key === 'End') next = length - 1;
-  else return;
-  event.preventDefault();
-  onSelect(next);
-  tabs[next]?.focus();
+function ShowcaseTabs({
+  items, label, prefix, active, onSelect, className,
+}: {
+  items: { id: string; tab: string }[];
+  label: string;
+  prefix: string;
+  active: number;
+  onSelect: (index: number) => void;
+  className: string;
+}) {
+  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    let next: number;
+    if (event.key === 'ArrowRight') next = (active + 1) % items.length;
+    else if (event.key === 'ArrowLeft') next = (active + items.length - 1) % items.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = items.length - 1;
+    else return;
+
+    event.preventDefault();
+    onSelect(next);
+    buttons.current[next]?.focus();
+  }
+
+  return (
+    <div className={`du-tabs du-tabs-box ${styles.tabs} ${className}`} role="tablist"
+      aria-label={label} onKeyDown={handleKeyDown}>
+      {items.map((item, index) => (
+        <button key={item.id} id={`${prefix}-tab-${item.id}`} type="button" role="tab"
+          ref={(button) => { buttons.current[index] = button; }}
+          className={`du-tab ${styles.tab} ${index === active ? 'du-tab-active' : ''}`}
+          aria-selected={index === active} aria-controls={`${prefix}-panel-${item.id}`}
+          tabIndex={index === active ? 0 : -1} onClick={() => onSelect(index)}>
+          {item.tab}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 function HardwareLab() {
   const [active, setActive] = useState(0);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const board = BOARDS[active];
 
   return (
     <section className={styles.section} id="systems">
@@ -379,66 +403,45 @@ function HardwareLab() {
           lede="Flight controllers run the control software, and electronic speed controllers drive the motors. Compare the ELARA boards that run ANSA and the ARIA 50A speed controller that feeds live current readings back to the flight controller. Open the specifications to see what fits your build."
         />
 
-        <div className={`du-tabs du-tabs-box ${styles.tabs} ${styles.hardwareTabs}`} role="tablist" aria-label="Hardware" onKeyDown={(event) => selectTab(event, active, BOARDS.length, tabRefs.current, setActive)}>
-          {BOARDS.map((b, i) => (
-            <button
-              key={b.id}
-              ref={(el) => {
-                tabRefs.current[i] = el;
-              }}
-              type="button"
-              role="tab"
-              id={`hw-tab-${b.id}`}
-              aria-selected={i === active}
-              aria-controls="hw-panel"
-              tabIndex={i === active ? 0 : -1}
-              className={`du-tab ${styles.tab} ${i === active ? 'du-tab-active' : ''}`}
-              onClick={() => setActive(i)}
-            >
-              {b.tab}
-            </button>
+        <ShowcaseTabs items={BOARDS} label="Hardware" prefix="hw" active={active}
+          onSelect={setActive} className={styles.hardwareTabs} />
+        <div className={`du-card du-card-border ${styles.showcase}`}>
+          {BOARDS.map((board, index) => (
+            <div key={board.id} className={`${styles.showcasePanel} ${styles.lab}`}
+              role="tabpanel" data-board={board.id} id={`hw-panel-${board.id}`} aria-labelledby={`hw-tab-${board.id}`}
+              aria-hidden={index !== active} inert={index !== active}>
+              <div className={styles.labMedia}>
+                <img className={styles.labImage} src={board.image.src} alt={board.image.alt}
+                  width={board.image.width} height={board.image.height} decoding="async" loading="lazy" />
+              </div>
+              <div className={`du-card-body ${styles.labBody}`}>
+                <div className={styles.labIntro}>
+                  <h3 className={`du-card-title ${styles.labTitle}`}>{board.name}</h3>
+                  <p className={styles.labKind}>{board.kind}</p>
+                  <p className={styles.labDesc}>{board.desc}</p>
+                </div>
+                <table className={`du-table ${styles.specTable}`}>
+                  <thead>
+                    <tr>
+                      <th scope="col">Parameter</th>
+                      <th scope="col">Specification</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {board.specs.map(([param, spec]) => (
+                      <tr key={param}>
+                        <th scope="row">{param}</th>
+                        <td>{spec}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <Link href={board.href} className={`du-btn du-btn-link ${styles.labLink}`}>
+                  Full documentation <Icon name="circle-arrow-right" />
+                </Link>
+              </div>
+            </div>
           ))}
-        </div>
-
-        <div className={`du-card du-card-border ${styles.lab}`} role="tabpanel" id="hw-panel" aria-labelledby={`hw-tab-${board.id}`}>
-          <div className={styles.labMedia}>
-            <img
-              key={board.id}
-              className={styles.labImage}
-              src={board.image.src}
-              alt={board.image.alt}
-              width={board.image.width}
-              height={board.image.height}
-              decoding="async"
-              loading="lazy"
-            />
-          </div>
-
-          <div className={`du-card-body ${styles.labBody}`}>
-            <h3 className={`du-card-title ${styles.labTitle}`}>{board.name}</h3>
-            <p className={styles.labKind}>{board.kind}</p>
-            <p className={styles.labDesc}>{board.desc}</p>
-            <table className={`du-table ${styles.specTable}`}>
-              <thead>
-                <tr>
-                  <th scope="col">Parameter</th>
-                  <th scope="col">Specification</th>
-                </tr>
-              </thead>
-              <tbody>
-                {board.specs.map(([param, spec]) => (
-                  <tr key={param}>
-                    <td>{param}</td>
-                    <td>{spec}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <Link href={board.href} className={`du-btn du-btn-link ${styles.labLink}`}>
-              Full documentation
-              <Icon name="circle-arrow-right" />
-            </Link>
-          </div>
         </div>
       </div>
     </section>
@@ -447,37 +450,45 @@ function HardwareLab() {
 
 function RealityEngine() {
   const [active, setActive] = useState(0);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const scenario = SCENARIOS[active];
+  const [visited, setVisited] = useState([0]);
+
+  function selectScenario(index: number) {
+    setActive(index);
+    setVisited((previous) => previous.includes(index) ? previous : [...previous, index]);
+  }
 
   return (
     <section className={styles.section} id="simulation">
       <div className={styles.container}>
         <SectionHead title="Prove it before deployment" lede="Explore three of Certanity’s 24+ simulation domains with Spaceborn’s existing demonstration footage." />
-        <div className={`du-tabs du-tabs-box ${styles.tabs} ${styles.scenarioTabs}`} role="tablist" aria-label="Simulation scenarios"
-          onKeyDown={(event) => selectTab(event, active, SCENARIOS.length, tabs.current, setActive)}>
-          {SCENARIOS.map((scene, i) => (
-            <button key={scene.id} id={`sim-tab-${scene.id}`} type="button" role="tab"
-              ref={(element) => { tabs.current[i] = element; }}
-              className={`du-tab ${styles.tab} ${i === active ? 'du-tab-active' : ''}`}
-              aria-selected={i === active} aria-controls="sim-panel" tabIndex={i === active ? 0 : -1}
-              onClick={() => setActive(i)}>
-              {scene.tab}
-            </button>
-          ))}
-        </div>
-        <div className={`du-card du-card-border ${styles.engine}`} role="tabpanel" id="sim-panel" aria-labelledby={`sim-tab-${scenario.id}`}>
-          <div className={styles.viewport}>
-            <LoopingVideo key={scenario.id} className={styles.viewportVideo} src={scenario.video.src}
-              poster={scenario.video.poster} aria-label={scenario.title} />
-          </div>
-          <div className={`du-card-body ${styles.scenarioCopy}`}>
-            <h3>{scenario.title}</h3>
-            <p>{scenario.desc}</p>
-            <dl className={styles.readouts}>
-              {scenario.readouts.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
-            </dl>
-          </div>
+        <ShowcaseTabs items={SCENARIOS} label="Simulation scenarios" prefix="sim" active={active}
+          onSelect={selectScenario} className={styles.scenarioTabs} />
+        <div className={`du-card du-card-border ${styles.showcase}`}>
+          {SCENARIOS.map((scenario, index) => {
+            const selected = active === index;
+            return (
+              <div key={scenario.id} className={`${styles.showcasePanel} ${styles.engine}`}
+                role="tabpanel" id={`sim-panel-${scenario.id}`} aria-labelledby={`sim-tab-${scenario.id}`}
+                aria-hidden={!selected} inert={!selected} tabIndex={selected ? 0 : -1}>
+                <div className={styles.viewport}>
+                  <img className={styles.viewportPoster} src={scenario.video.poster} alt=""
+                    loading="lazy" decoding="async" />
+                  {visited.includes(index) && (
+                    <LoopingVideo className={styles.viewportVideo} src={scenario.video.src}
+                      compactSrc={scenario.video.compactSrc} active={selected}
+                      poster={scenario.video.poster} aria-label={scenario.title} />
+                  )}
+                </div>
+                <div className={`du-card-body ${styles.scenarioCopy}`}>
+                  <h3>{scenario.title}</h3>
+                  <p>{scenario.desc}</p>
+                  <dl className={styles.readouts}>
+                    {scenario.readouts.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+                  </dl>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <ul className={styles.partners} aria-label="Key customers and partners">
           {PARTNERS.map((partner) => (
@@ -501,7 +512,7 @@ const PLATFORM_LAYERS = [
 
 function TheProblem() {
   return (
-    <section className={styles.section} aria-label="The problem Spaceborn solves">
+    <section className={styles.section} id="how-the-stack-fits" aria-label="The problem Spaceborn solves">
       <div className={styles.container}>
         <SectionHead
           title="How the stack fits together"
@@ -510,21 +521,29 @@ function TheProblem() {
         <div className={styles.platformDiagram}>
           <ul className={styles.platformLayers}>
             {PLATFORM_LAYERS.map(({ name, icon, desc }) => (
-              <li key={name} className={`du-card du-card-side du-card-border ${styles.platformLayer}`}>
-                <span className={styles.platformIcon} aria-hidden="true">
-                  <Icon name={icon} />
-                </span>
-                <div className={`du-card-body ${styles.platformLayerBody}`}>
-                  <h3 className={`du-card-title ${styles.platformLayerTitle}`}>{name}</h3>
-                  <p>{desc}</p>
+              <li key={name} className={styles.platformLayerSlot}>
+                <div className={`du-aura du-aura-glow ${styles.platformAura}`}>
+                  <div className={`du-card du-card-side du-card-border ${styles.platformLayer}`}>
+                    <span className={styles.platformIcon} aria-hidden="true">
+                      <Icon name={icon} />
+                    </span>
+                    <div className={`du-card-body ${styles.platformLayerBody}`}>
+                      <h3 className={`du-card-title ${styles.platformLayerTitle}`}>{name}</h3>
+                      <p>{desc}</p>
+                    </div>
+                  </div>
                 </div>
               </li>
             ))}
           </ul>
-          <div className={styles.platformConnection} aria-hidden="true" />
-          <div className={`du-card du-card-border du-card-body ${styles.platformSummary}`}>
-            <h3 className="du-card-title">One connected Spaceborn platform</h3>
-            <p>Spaceborn brings those four layers into a single workflow. Test how the control software responds in a simulated environment, then carry that work forward as you validate it on real hardware. Your team can spend more time on what makes the machine unique.</p>
+          <div className={styles.platformConnection} aria-hidden="true">
+            <span><Icon name="arrow-down" /></span>
+          </div>
+          <div className={`du-aura du-aura-glow ${styles.platformAura} ${styles.platformSummaryAura}`}>
+            <div className={`du-card du-card-border du-card-body ${styles.platformSummary}`}>
+              <h3 className="du-card-title">One connected Spaceborn platform</h3>
+              <p>Spaceborn brings those four layers into a single workflow. Test how the control software responds in a simulated environment, then carry that work forward as you validate it on real hardware. Your team can spend more time on what makes the machine unique.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -560,7 +579,7 @@ function Closing() {
 export default function HomePage({ fontClassName }: { fontClassName: string }) {
   return (
     <div className={`${styles.page} ${fontClassName}`}>
-      <Navbar linkArrow={<Icon name="arrow-right" />} hideOnScroll={false} />
+      <Navbar hideOnScroll={false} />
 
       <main data-theme="spaceborn">
         <Hero />

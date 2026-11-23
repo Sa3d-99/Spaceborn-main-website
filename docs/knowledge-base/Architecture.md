@@ -21,11 +21,13 @@ products. It uses Next.js App Router, React, TypeScript, and vanilla CSS.
 
 ## Homepage dependencies
 
-On `redesign/trial-1`, CSS controls entrance and motion preferences. The
-homepage loads Font Awesome from `all.min.css` for navigation and UI icons.
+On `redesign/trial-1`, CSS controls entrance and motion preferences. The root
+layout loads Font Awesome from `all.min.css` for navigation and UI icons.
 The homepage uses checked-in Spaceborn media and existing Cloudinary URLs.
 The hero, product previews, and selected simulation use `LoopingVideo`.
-It plays muted loops in view, pauses off-screen, and respects reduced motion.
+It plays muted loops in view, pauses off-screen and on inactive tabs, and
+respects reduced motion. The active simulation keeps its media position across
+tab changes. Native video sources select a smaller rendition on compact layouts.
 Homepage anchors use native smooth scrolling, and the header stays in place.
 
 ## Setup and verification
@@ -45,12 +47,9 @@ npm run start
 `.github/workflows/ci.yml` typechecks, audits production dependencies, builds
 the standalone image, and tests the running container on pushes and pull
 requests targeting `main` or `redesign/trial-1`. The smoke test checks the home
-and about pages, video byte ranges, and the container user. A separate
-package-write job publishes the same tested image to GitHub Container Registry
-by commit SHA on successful pushes or an opt-in manual run on either delivery
-branch. GitHub Actions uses its built-in token for
-publication. The repository's optional public releases feed variable is
-passed at build time.
+and about pages, video byte ranges, and the container user. GitHub Actions
+runs these checks on its runner and stops after verification. The repository's
+optional public releases feed variable is passed at build time.
 
 The root `Dockerfile` sets `NEXT_STANDALONE=1` for the build. The runtime stage
 copies Next's traced server, static assets, and `public/` under a non-root user.
