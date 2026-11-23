@@ -1,6 +1,8 @@
 # Homepage
 
-[[README]] · [[Architecture]]
+[[README]] · [[Architecture]] · [[Redesign-trial-1]]
+
+These notes describe the homepage on `main` before the redesign trial.
 
 ## Scope and decisions — 2026-11-22
 

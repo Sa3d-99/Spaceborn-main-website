@@ -170,19 +170,19 @@ export default function UpcomingLaunches() {
     >
       <button 
         type="button"
-        className="launches-btn"
+        className="nav-dropdown-btn"
         aria-expanded={isOpen}
         aria-haspopup="true"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="launches-btn-text">RELEASES</span>
+        <span>RELEASES</span>
         <svg
           width="8"
           height="5"
           viewBox="0 0 8 5"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`chevron ${isOpen ? 'open' : ''}`}
+          className={`nav-chevron ${isOpen ? 'is-open' : ''}`}
           aria-hidden="true"
         >
           <path d="M1 1L4 4L7 1" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>

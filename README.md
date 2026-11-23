@@ -14,7 +14,8 @@ Follow these instructions to set up the project locally for development and test
 
 ### Prerequisites
 
-Install [Node.js](https://nodejs.org/) 20.9 or newer and npm.
+Use [Node.js](https://nodejs.org/) 26.13.1 LTS and its bundled npm.
+If you use nvm, run `nvm install && nvm use` from the repository root.
 
 ### Installation
 
@@ -29,6 +30,38 @@ Open [http://localhost:3000](http://localhost:3000). The homepage preview requir
 no environment variables. To test the production build locally, stop the dev
 server and run `npm run build` followed by `npm run start`.
 
+### Run with Docker
+
+Build and run the production server, then open [localhost:3000](http://localhost:3000).
+
+```sh
+docker compose up --build
+```
+
+The image builds the Next.js standalone server and runs it as the non-root
+`node` user. The build downloads npm dependencies and the Geist font from
+Google Fonts. The homepage works without runtime environment variables.
+
+For certificates or resume uploads, provide the existing server credentials
+with `docker run --env-file path/to/runtime.env …`. See the [backend setup](backend/README.md).
+If you use a custom releases feed, pass `--build-arg NEXT_PUBLIC_LAUNCHES_JSON_URL=…`
+to `docker build` so Next.js can include the URL in the browser bundle.
+
+### CI and image delivery
+
+GitHub Actions runs the TypeScript check, production dependency audit, Docker
+build, and container smoke test on pushes and pull requests targeting `main`
+or `redesign/trial-1`. Successful pushes publish the tested image to GitHub
+Container Registry using `sha-<commit>` as the tag. Pull requests verify the image. The manual workflow can also publish from
+either delivery branch when **Publish the verified image to GHCR** is selected.
+
+Use the image reference in the workflow's **Publish to GitHub Container
+Registry** job summary to run a specific verified build. GitHub package
+access applies to registry pulls. For a custom releases feed, set the
+repository Actions variable `NEXT_PUBLIC_LAUNCHES_JSON_URL`. The workflow
+passes it to the Docker build as a public value. Keep server credentials
+in the environment where you run the image.
+
 ### Development Scripts
 
 In the project directory, you can run the following scripts:
@@ -36,6 +69,7 @@ In the project directory, you can run the following scripts:
 | Command | Description  |
 | :--- | :--- |
 | `npm run dev` | Runs the app in development mode at [http://localhost:3000](http://localhost:3000). |
+| `npm run typecheck` | Generates Next.js route types and runs TypeScript checks. |
 | `npm run build` | Builds the application for production usage into the `.next` folder. |
 | `npm run start` | Starts a Next.js production server using the built assets. |
 
@@ -65,13 +99,14 @@ Here is a quick overview of the directory layout:
 
 ## 🛠️ Tech Stack & Features
 
-- **Next.js 16** (App Router)
-- **React 19**
-- **TypeScript**
+- **Next.js 16.4** (App Router)
+- **React 19.3**
+- **TypeScript 7** with an ES2025 compiler target
+- **Tailwind CSS 4 and daisyUI 5**
 - **Vanilla CSS** with customizable animations and custom responsive layouts
 - Fully-responsive design (mobile-first transitions)
 - High-fidelity background videos & media components
-- Firebase
+- PostgreSQL for certificate records and Google Drive for resume storage
 
 ---
 
