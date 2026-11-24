@@ -258,11 +258,13 @@ function SectionHead({ title, lede }: { title: string; lede: string }) {
 function Hero() {
   return (
     <section className={styles.hero} id="releases" aria-labelledby="home-title">
-      <LoopingVideo className={styles.heroVideo} src="/media/home/hero-sb1.mp4"
-        poster="/media/home/hero-sb1.webp" aria-hidden="true" />
-      <div className={styles.heroVignette} />
+      <LoopingVideo className={styles.heroVideo} src="/media/home/hero.mp4"
+        poster="/media/home/hero.webp" aria-hidden="true" />
       <div className={`${styles.container} ${styles.heroContent}`}>
-        <h1 className={styles.heroTitle} id="home-title">Build autonomous<br className={styles.heroBreak} /> machines.</h1>
+        <h1 className={styles.heroTitle} id="home-title">
+          <span className={styles.heroTitleLine}><span>Build autonomous</span></span>{' '}
+          <span className={styles.heroTitleLine}><span>machines.</span></span>
+        </h1>
         <p className={styles.heroSub}>Autonomy software, simulation, and flight hardware in one Spaceborn stack.</p>
       </div>
     </section>
@@ -537,7 +539,9 @@ function TheProblem() {
             ))}
           </ul>
           <div className={styles.platformConnection} aria-hidden="true">
-            <span><Icon name="arrow-down" /></span>
+            <div className={`du-aura du-aura-glow ${styles.platformStem}`}>
+              <span className={styles.platformArrow}><Icon name="arrow-down" /></span>
+            </div>
           </div>
           <div className={`du-aura du-aura-glow ${styles.platformAura} ${styles.platformSummaryAura}`}>
             <div className={`du-card du-card-border du-card-body ${styles.platformSummary}`}>
