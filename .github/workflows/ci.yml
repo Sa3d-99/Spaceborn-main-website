@@ -56,6 +56,6 @@ jobs:
           curl --fail --silent --show-error http://127.0.0.1:3000/company/about > /tmp/spaceborn-about.html
           grep -q '<h1' /tmp/spaceborn-about.html
           status="$(curl --fail --silent --show-error --range 0-127 --output /dev/null \
-            --write-out '%{http_code}' http://127.0.0.1:3000/media/home/hero-sb1.mp4)"
+            --write-out '%{http_code}' http://127.0.0.1:3000/media/home/hero.mp4)"
           test "$status" = 206
           test "$(docker exec "$container" id -u)" != 0
